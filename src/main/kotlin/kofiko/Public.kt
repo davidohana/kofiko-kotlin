@@ -3,12 +3,16 @@ package kofiko
 import java.lang.reflect.Type
 
 
-interface KofikoConfigProvider {
+fun interface KofikoConfigProvider {
     fun read(section: String, option: String, type: Type, typeConverter: TextToTypeConverter): Any?
 }
 
-interface TextToTypeConverter {
+fun interface TextToTypeConverter {
     fun convert(textValue: String, targetType: Type): Any
+}
+
+fun interface OverrideNotifier {
+    fun accept(override: FieldOverride)
 }
 
 interface ProfileSupport {
@@ -30,7 +34,14 @@ class KofikoSettings {
     var appendToLists = false
     var clearContainerPrefix = "^C|"
     var appendContainerPrefix = "^A|"
-    var onOverride: (String, String, Any, Any, String) -> Unit = { _, _, _, _, _ -> Unit }
+    var onOverride: OverrideNotifier = OverrideNotifier { }
 }
 
-data class FieldOverride(val fieldName: String, val oldValue: Any, val newValue: Any, val byProvider: String)
+data class FieldOverride(
+    val sectionName: String, val optionName: String,
+    val oldValue: Any, val newValue: Any, val byProvider: String
+) {
+    override fun toString(): String {
+        return "${sectionName}.${optionName} was changed from <${oldValue}> to <${newValue}> by $byProvider"
+    }
+}

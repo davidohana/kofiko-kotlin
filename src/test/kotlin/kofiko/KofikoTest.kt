@@ -1,9 +1,9 @@
 package kofiko
 
 import org.amshove.kluent.shouldBeEmpty
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainSame
-import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import java.awt.Color
 import java.io.BufferedWriter
@@ -155,7 +155,7 @@ class KofikoTest {
 
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
@@ -169,7 +169,7 @@ class KofikoTest {
         val provider = ConfigProviderJson.fromString(json)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
@@ -205,7 +205,7 @@ class KofikoTest {
         val provider = ConfigProviderEnv("test", ":", env)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
@@ -246,7 +246,7 @@ class KofikoTest {
         val provider = ConfigProviderIni(iniPath.toFile())
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
@@ -283,7 +283,7 @@ class KofikoTest {
         val provider = ConfigProviderCli(cliArgs)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
@@ -341,7 +341,7 @@ class KofikoTest {
         val provider = ConfigProviderEnv(env = env)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
-        settings.onOverride = Kofiko.Companion::printOverride
+        settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings, "staging")
         val cfg = ProfiledConfig()
         kofiko.configure(cfg)
@@ -350,7 +350,7 @@ class KofikoTest {
         cfg.envName.shouldBeEqualTo("staging")
 
         val overrides = kofiko.sectionNameToOverrides["ProfiledConfig"] ?: error("")
-        overrides.shouldContain(FieldOverride("port", 70, 8080, "ConfigProviderEnv"))
-        overrides.shouldContain(FieldOverride("envName", "default", "staging", "Profile (staging)"))
+        overrides.shouldContain(FieldOverride("ProfiledConfig", "port", 70, 8080, "ConfigProviderEnv"))
+        overrides.shouldContain(FieldOverride("ProfiledConfig", "envName", "default", "staging", "Profile (staging)"))
     }
 }

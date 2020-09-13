@@ -131,10 +131,9 @@ class Kofiko {
             val newValue = field.get(configSection)
             if (oldValue != newValue) {
                 val providerName = fieldToProvider[field.name] ?: "unknown"
-                settings.onOverride(
-                    sectionName, field.name, oldValue, newValue, providerName
-                )
-                sectionOverrides.add(FieldOverride(field.name, oldValue, newValue, providerName))
+                val fieldOverride = FieldOverride(sectionName, field.name, oldValue, newValue, providerName)
+                settings.onOverride.accept(fieldOverride)
+                sectionOverrides.add(fieldOverride)
             }
         }
 
@@ -155,7 +154,6 @@ class Kofiko {
 
     companion object {
         val instance = Kofiko()
-        private val logger = Logger.getLogger(Kofiko::class.java.name)
 
         fun init(settings: KofikoSettings, profileName: String = "") {
             instance.initSettings(settings, profileName)
@@ -164,33 +162,19 @@ class Kofiko {
         fun configure(configSection: Any) {
             instance.configure(configSection)
         }
-
-        @Suppress("unused")
-        fun logOverride(
-            sectionName: String,
-            optionName: String,
-            oldValue: Any,
-            newValue: Any,
-            providerName: String
-        ) {
-            val msg =
-                "$sectionName.$optionName was changed from <$oldValue> to <$newValue> by $providerName"
-            logger.log(Level.INFO, msg)
-        }
-
-        fun printOverride(
-            sectionName: String,
-            optionName: String,
-            oldValue: Any,
-            newValue: Any,
-            providerName: String
-        ) {
-            val msg =
-                "$sectionName.$optionName was changed from <$oldValue> to <$newValue> by $providerName"
-            println(msg)
-        }
-
     }
 }
 
+class PrintOverrideNotifier : OverrideNotifier {
+    override fun accept(override: FieldOverride) {
+        println(override.toString())
+    }
+}
+
+class LogOverrideNotifier : OverrideNotifier {
+    private val logger = Logger.getLogger(Kofiko::class.java.name)
+    override fun accept(override: FieldOverride) {
+        logger.log(Level.INFO, override.toString())
+    }
+}
 
