@@ -10,8 +10,8 @@
     <packaging>jar</packaging>
 
     <name>Kofiko</name>
-    <description>HBPE - Histogram Based Percentile Estimator</description>
-    <url>https://github.com/IBM/HBPE</url>
+    <description>Kode First Konfiguration</description>
+    <url>https://github.com/davidohana/kofiko-kotlin</url>
 
     <licenses>
         <license>
