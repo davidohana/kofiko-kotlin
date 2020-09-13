@@ -114,7 +114,7 @@ class Kofiko {
         if (configSection is ProfileSupport)
             configSection.setProfile(profileName)
 
-        val sectionName = configSection::class.java.simpleName
+        val sectionName = getSectionName(configSection)
         val sectionLookups = getSectionNameLookups(sectionName, settings)
         for (field in fields) {
             fieldToProvider[field.name] = "Profile ($profileName)"

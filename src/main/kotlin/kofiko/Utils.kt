@@ -74,6 +74,10 @@ internal fun getSectionNameLookups(sectionName: String, settings: KofikoSettings
     for (token in settings.sectionLookupDeleteTokens)
         sectionWithoutTokens = sectionWithoutTokens.replace(token, "")
 
+    // if we get empty section name after all deletions, revert to original name
+    if (sectionWithoutTokens.isEmpty())
+        sectionWithoutTokens = sectionName
+
     if (sectionWithoutTokens != sectionName)
         lookups.addAll(getCaseLookups(sectionWithoutTokens, settings))
 
@@ -82,4 +86,11 @@ internal fun getSectionNameLookups(sectionName: String, settings: KofikoSettings
 
 internal fun getOptionNameLookups(optionName: String, settings: KofikoSettings): List<String> {
     return getCaseLookups(optionName, settings).toList()
+}
+
+internal fun getSectionName(obj: Any):String {
+    val clazz = obj::class.java
+    val prefix = clazz.packageName + "."
+    val name = clazz.canonicalName ?: clazz.simpleName
+    return name.removePrefix(prefix)
 }

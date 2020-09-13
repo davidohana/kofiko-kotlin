@@ -11,6 +11,16 @@ import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.Paths
 
+@Suppress("PropertyName")
+class Config {
+    var dummy = 1
+}
+
+class ParentOfNested {
+    class Config {
+        var dummy = 1
+    }
+}
 
 @Suppress("PropertyName")
 class KofikoSampleConfig {
@@ -352,5 +362,28 @@ class KofikoTest {
         val overrides = kofiko.sectionNameToOverrides["ProfiledConfig"] ?: error("")
         overrides.shouldContain(FieldOverride("ProfiledConfig", "port", 70, 8080, "ConfigProviderEnv"))
         overrides.shouldContain(FieldOverride("ProfiledConfig", "envName", "default", "staging", "Profile (staging)"))
+    }
+
+
+    @Test
+    fun testEmptySectionName()
+    {
+        val kofiko = Kofiko(KofikoSettings())
+        kofiko.configure(Config())
+        kofiko.sectionNameToOverrides.keys.shouldContain("Config")
+    }
+
+    @Test
+    fun testNestedConfigSection()
+    {
+        val kofiko = Kofiko(KofikoSettings())
+        kofiko.configure(ParentOfNested.Config())
+        kofiko.sectionNameToOverrides.keys.shouldContain("ParentOfNested.Config")
+
+        class NestedInFun() {
+            val test = 1
+        }
+        kofiko.configure(NestedInFun())
+        kofiko.sectionNameToOverrides.keys.shouldContain("NestedInFun")
     }
 }
