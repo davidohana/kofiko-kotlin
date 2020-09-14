@@ -136,7 +136,7 @@ class Kofiko {
 
             if (isSecretOption(field)) {
                 oldValue = "***"
-                newValue = "***"
+                newValue = "****"
             }
 
             if (oldValue != newValue) {

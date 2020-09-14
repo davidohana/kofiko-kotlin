@@ -419,8 +419,12 @@ class KofikoTest {
         kofiko.configure(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
         kofiko.sectionNameToOverrides.size.shouldBeEqualTo(1)
-        kofiko.sectionNameToOverrides.values.first().size.shouldBeEqualTo(1)
-        kofiko.sectionNameToOverrides.values.first().first().optionName.shouldBeEqualTo("notSecret")
+        val overrides = kofiko.sectionNameToOverrides.values.first()
+        overrides.size.shouldBeEqualTo(2)
+        overrides.first().optionName.shouldBeEqualTo("secret")
+        overrides.first().newValue.shouldBeEqualTo("****")
+        overrides.last().optionName.shouldBeEqualTo("notSecret")
+        overrides.last().newValue.shouldBeEqualTo("not a secret")
     }
 
 }

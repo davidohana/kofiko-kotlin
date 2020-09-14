@@ -6,11 +6,11 @@
 
     <groupId>org.davidoh.kofiko</groupId>
     <artifactId>kofiko-core</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <name>Kofiko</name>
-    <description>Kode First Konfiguration</description>
+    <description>Kode-First Konfiguration</description>
     <url>https://github.com/davidohana/kofiko-kotlin</url>
 
     <licenses>
