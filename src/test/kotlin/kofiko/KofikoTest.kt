@@ -10,6 +10,7 @@ import java.io.BufferedWriter
 import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.reflect.jvm.javaField
 
 @Suppress("PropertyName")
 class Config {
@@ -360,8 +361,24 @@ class KofikoTest {
         cfg.envName.shouldBeEqualTo("staging")
 
         val overrides = kofiko.sectionNameToOverrides["ProfiledConfig"] ?: error("")
-        overrides.shouldContain(FieldOverride("ProfiledConfig", "port", 70, 8080, "ConfigProviderEnv"))
-        overrides.shouldContain(FieldOverride("ProfiledConfig", "envName", "default", "staging", "Profile (staging)"))
+        overrides.shouldContain(
+            FieldOverride(
+                "ProfiledConfig",
+                ProfiledConfig::port.javaField!!,
+                70,
+                8080,
+                "ConfigProviderEnv"
+            )
+        )
+        overrides.shouldContain(
+            FieldOverride(
+                "ProfiledConfig",
+                ProfiledConfig::envName.javaField!!,
+                "default",
+                "staging",
+                "Profile (staging)"
+            )
+        )
     }
 
 
@@ -374,27 +391,51 @@ class KofikoTest {
 
     @Test
     fun testNestedConfigSection() {
-        val kofiko = Kofiko(KofikoSettings())
-        kofiko.configure(ParentOfNested.Config())
-        kofiko.sectionNameToOverrides.keys.shouldContain("ParentOfNested.Config")
-
-        class NestedInFun() {
-            val test = 1
+        class NestedInFun {
+            var test = 1
         }
-        kofiko.configure(NestedInFun())
+
+        val settings = KofikoSettings()
+
+        val env = mapOf(
+            "NestedInFun_test" to "2",
+            "ParentOfNested.Config_dummy" to "3",
+        )
+
+        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg1 = ParentOfNested.Config()
+        kofiko.configure(cfg1)
+        kofiko.sectionNameToOverrides.keys.shouldContain("ParentOfNested.Config")
+        cfg1.dummy.shouldBeEqualTo(3)
+
+        val cfg2 = NestedInFun()
+        kofiko.configure(cfg2)
         kofiko.sectionNameToOverrides.keys.shouldContain("NestedInFun")
+        cfg2.test.shouldBeEqualTo(2)
     }
 
     @Test
     fun testAnnotatedConfigSection() {
         @ConfigSection("anno")
         class AnnotatedSection {
-            val test = 1
+            var test = 1
         }
 
-        val kofiko = Kofiko(KofikoSettings())
-        kofiko.configure(AnnotatedSection())
+        val settings = KofikoSettings()
+        settings.onOverride = PrintOverrideNotifier()
+        val env = mapOf(
+            "anno_test" to "2",
+        )
+
+        settings.configProviders.add(ConfigProviderEnv(env = env))
+        val kofiko = Kofiko(settings)
+
+        val cfg = AnnotatedSection()
+        kofiko.configure(cfg)
         kofiko.sectionNameToOverrides.keys.shouldContain("anno")
+        cfg.test.shouldBeEqualTo(2)
     }
 
     @Test
@@ -404,6 +445,9 @@ class KofikoTest {
             var secret = "aaa"
 
             var notSecret = "bbb"
+
+            @Secret
+            var unchangedSecret = "unchanged"
         }
 
         val settings = KofikoSettings()
@@ -414,17 +458,17 @@ class KofikoTest {
             "config_not_secret" to "not a secret",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env=env))
+        settings.configProviders.add(ConfigProviderEnv(env = env))
         val kofiko = Kofiko(settings)
         kofiko.configure(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
         kofiko.sectionNameToOverrides.size.shouldBeEqualTo(1)
         val overrides = kofiko.sectionNameToOverrides.values.first()
         overrides.size.shouldBeEqualTo(2)
-        overrides.first().optionName.shouldBeEqualTo("secret")
-        overrides.first().newValue.shouldBeEqualTo("****")
-        overrides.last().optionName.shouldBeEqualTo("notSecret")
-        overrides.last().newValue.shouldBeEqualTo("not a secret")
+        overrides[0].field.name.shouldBeEqualTo("secret")
+        overrides[0].newValue.shouldBeEqualTo("****")
+        overrides[1].field.name.shouldBeEqualTo("notSecret")
+        overrides[1].newValue.shouldBeEqualTo("not a secret")
     }
 
 }

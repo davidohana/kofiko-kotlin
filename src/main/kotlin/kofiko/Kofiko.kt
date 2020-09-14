@@ -2,7 +2,6 @@
 
 package kofiko
 
-import java.lang.RuntimeException
 import java.lang.reflect.Field
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
@@ -96,7 +95,10 @@ class Kofiko {
                     val newValue = try {
                         provider.read(sectionName, optionName, field.genericType, textToTypeConverter) ?: continue
                     } catch (ex: Exception) {
-                        throw RuntimeException("Failed to read override value for section=$sectionName, option=$optionName by provider $provider", ex)
+                        throw RuntimeException(
+                            "Failed to read override value for section=$sectionName, option=$optionName by provider $provider",
+                            ex
+                        )
                     }
                     val oldValue = field.get(configObject)
                     val mergedValue = mergeContainers(oldValue, newValue)
@@ -134,14 +136,14 @@ class Kofiko {
             var oldValue = oldValues[i]
             var newValue = field.get(configSection)
 
-            if (isSecretOption(field)) {
-                oldValue = "***"
-                newValue = "****"
-            }
-
             if (oldValue != newValue) {
+                if (isSecretOption(field)) {
+                    oldValue = "***"
+                    newValue = "****"
+                }
+
                 val providerName = fieldToProvider[field.name] ?: "unknown"
-                val fieldOverride = FieldOverride(sectionName, field.name, oldValue, newValue, providerName)
+                val fieldOverride = FieldOverride(sectionName, field, oldValue, newValue, providerName)
                 settings.onOverride.accept(fieldOverride)
                 sectionOverrides.add(fieldOverride)
             }

@@ -1,5 +1,6 @@
 package kofiko
 
+import java.lang.reflect.Field
 import java.lang.reflect.Type
 
 
@@ -44,10 +45,9 @@ class KofikoSettings {
 }
 
 data class FieldOverride(
-    val sectionName: String, val optionName: String,
-    val oldValue: Any, val newValue: Any, val byProvider: String
+    val sectionName: String, val field: Field, val oldValue: Any, val newValue: Any, val byProvider: String
 ) {
     override fun toString(): String {
-        return "${sectionName}.${optionName} was changed from <${oldValue}> to <${newValue}> by $byProvider"
+        return "${sectionName}.${field.name} was changed from <${oldValue}> to <${newValue}> by $byProvider"
     }
 }
