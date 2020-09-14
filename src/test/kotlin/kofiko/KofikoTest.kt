@@ -92,13 +92,13 @@ class KofikoTest {
         check(fields.size == 7)
 
         val fieldNames = fields.map { it.name }
-        check(fieldNames.contains("name"))
-        check(fieldNames.contains("Age"))
-        check(fieldNames.contains("COLOR"))
-        check(fieldNames.contains("_height"))
-        check(fieldNames.contains("NAME"))
-        check(fieldNames.contains("jvmField"))
-        check(fieldNames.contains("x"))
+        fieldNames.shouldContain("name")
+        fieldNames.shouldContain("Age")
+        fieldNames.shouldContain("COLOR")
+        fieldNames.shouldContain("_height")
+        fieldNames.shouldContain("NAME")
+        fieldNames.shouldContain("jvmField")
+        fieldNames.shouldContain("x")
     }
 
     @Test
@@ -366,16 +366,14 @@ class KofikoTest {
 
 
     @Test
-    fun testEmptySectionName()
-    {
+    fun testEmptySectionName() {
         val kofiko = Kofiko(KofikoSettings())
         kofiko.configure(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
     }
 
     @Test
-    fun testNestedConfigSection()
-    {
+    fun testNestedConfigSection() {
         val kofiko = Kofiko(KofikoSettings())
         kofiko.configure(ParentOfNested.Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("ParentOfNested.Config")
@@ -386,4 +384,43 @@ class KofikoTest {
         kofiko.configure(NestedInFun())
         kofiko.sectionNameToOverrides.keys.shouldContain("NestedInFun")
     }
+
+    @Test
+    fun testAnnotatedConfigSection() {
+        @ConfigSection("anno")
+        class AnnotatedSection {
+            val test = 1
+        }
+
+        val kofiko = Kofiko(KofikoSettings())
+        kofiko.configure(AnnotatedSection())
+        kofiko.sectionNameToOverrides.keys.shouldContain("anno")
+    }
+
+    @Test
+    fun testSecretOption() {
+        class Config {
+            @Secret
+            var secret = "aaa"
+
+            var notSecret = "bbb"
+        }
+
+        val settings = KofikoSettings()
+        settings.onOverride = PrintOverrideNotifier()
+
+        val env = mapOf(
+            "config_secret" to "secret",
+            "config_not_secret" to "not a secret",
+        )
+
+        settings.configProviders.add(ConfigProviderEnv(env=env))
+        val kofiko = Kofiko(settings)
+        kofiko.configure(Config())
+        kofiko.sectionNameToOverrides.keys.shouldContain("Config")
+        kofiko.sectionNameToOverrides.size.shouldBeEqualTo(1)
+        kofiko.sectionNameToOverrides.values.first().size.shouldBeEqualTo(1)
+        kofiko.sectionNameToOverrides.values.first().first().optionName.shouldBeEqualTo("notSecret")
+    }
+
 }

@@ -19,6 +19,12 @@ interface ProfileSupport {
     fun setProfile(profileName: String)
 }
 
+@Target(AnnotationTarget.CLASS)
+annotation class ConfigSection(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+annotation class Secret
+
 class KofikoSettings {
     var caseMappingAllowUpper = true
     var caseMappingAllowLower = true
@@ -26,7 +32,7 @@ class KofikoSettings {
     var caseMappingAllowSnakeUpper = true
     var caseMappingAllowSnakeLower = true
     var caseMappingAllowUpperFirstLetter = true
-    var sectionLookupDeleteTokens = listOf("Config", "Settings", "Cfg")
+    var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg")
     var configProviders = mutableListOf<KofikoConfigProvider>()
     var listSeparator = ","
     var keyToValSeparator = ":"

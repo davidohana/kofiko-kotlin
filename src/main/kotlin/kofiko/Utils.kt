@@ -88,9 +88,20 @@ internal fun getOptionNameLookups(optionName: String, settings: KofikoSettings):
     return getCaseLookups(optionName, settings).toList()
 }
 
-internal fun getSectionName(obj: Any):String {
+internal fun getSectionName(obj: Any): String {
     val clazz = obj::class.java
+    val annotationsByType = clazz.getAnnotationsByType(ConfigSection::class.java)
+    if (annotationsByType.isNotEmpty())
+        return annotationsByType.first().name
+
     val prefix = clazz.packageName + "."
     val name = clazz.canonicalName ?: clazz.simpleName
     return name.removePrefix(prefix)
+}
+
+internal fun isSecretOption(field: Field): Boolean {
+    if (field.isAnnotationPresent(Secret::class.java))
+        return true
+
+    return false
 }

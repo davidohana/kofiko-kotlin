@@ -127,8 +127,14 @@ class Kofiko {
         }
 
         for ((i, field) in fields.withIndex()) {
-            val oldValue = oldValues[i]
-            val newValue = field.get(configSection)
+            var oldValue = oldValues[i]
+            var newValue = field.get(configSection)
+
+            if (isSecretOption(field)) {
+                oldValue = "***"
+                newValue = "***"
+            }
+
             if (oldValue != newValue) {
                 val providerName = fieldToProvider[field.name] ?: "unknown"
                 val fieldOverride = FieldOverride(sectionName, field.name, oldValue, newValue, providerName)

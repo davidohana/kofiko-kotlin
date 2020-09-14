@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>kofiko</groupId>
+    <groupId>org.davidoh.kofiko</groupId>
     <artifactId>kofiko-core</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
 
     <name>Kofiko</name>
@@ -127,7 +127,7 @@
         <repository>
             <id>bintray-davidohana-kofiko</id>
             <name>davidohana-kofiko</name>
-            <url>https://api.bintray.com/maven/davidohana/kofiko/kofiko-core/;publish=1</url>
+            <url>https://api.bintray.com/maven/davidohana/kofiko/org.davidoh.kofiko.kofiko-core/;publish=1</url>
         </repository>
     </distributionManagement>
 
