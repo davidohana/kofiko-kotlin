@@ -23,6 +23,11 @@ class ParentOfNested {
     }
 }
 
+object MyCar {
+    var color = "red"
+}
+
+
 @Suppress("PropertyName")
 class KofikoSampleConfig {
     var MyInt = 11
@@ -90,7 +95,7 @@ class KofikoTest {
     @Test
     fun testGetFields() {
         val fields = getOverridableFields(TestClass::class.java)
-        check(fields.size == 7)
+        fields.size.shouldBeEqualTo(7)
 
         val fieldNames = fields.map { it.name }
         fieldNames.shouldContain("name")
@@ -466,9 +471,24 @@ class KofikoTest {
         val overrides = kofiko.sectionNameToOverrides.values.first()
         overrides.size.shouldBeEqualTo(2)
         overrides[0].field.name.shouldBeEqualTo("secret")
-        overrides[0].newValue.shouldBeEqualTo("****")
+        overrides[0].newValue.shouldBeEqualTo("[hidden]")
         overrides[1].field.name.shouldBeEqualTo("notSecret")
         overrides[1].newValue.shouldBeEqualTo("not a secret")
     }
 
+    @Test
+    fun testKotlinObject() {
+
+        val settings = KofikoSettings()
+        settings.onOverride = PrintOverrideNotifier()
+
+        val env = mapOf(
+            "my_car_color" to "blue",
+        )
+
+        settings.configProviders.add(ConfigProviderEnv(env = env))
+        val kofiko = Kofiko(settings)
+        kofiko.configure(MyCar)
+        MyCar.color.shouldBeEqualTo("blue")
+    }
 }

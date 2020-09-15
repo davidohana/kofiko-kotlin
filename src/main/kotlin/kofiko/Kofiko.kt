@@ -138,8 +138,9 @@ class Kofiko {
 
             if (oldValue != newValue) {
                 if (isSecretOption(field)) {
-                    oldValue = "***"
-                    newValue = "****"
+                    val hiddenToken = "[hidden]"
+                    oldValue = hiddenToken
+                    newValue = hiddenToken
                 }
 
                 val providerName = fieldToProvider[field.name] ?: "unknown"

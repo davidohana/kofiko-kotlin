@@ -4,16 +4,16 @@ import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
 internal fun <T> getOverridableFields(c: Class<T>): List<Field> {
-    val instanceFields = c.declaredFields
-        .filter { !Modifier.isStatic(it.modifiers) }
+    val allFields = c.declaredFields
 
-    val fields = instanceFields
+    val fields = allFields
         .filter { Modifier.isPublic(it.modifiers) }
+        .filter { it.name != "Companion" }
         .toMutableList()
 
-    val backingFields = instanceFields
+    val backingFields = allFields
         .filter { Modifier.isPrivate(it.modifiers) }
-        .filter { hasPublicGetterSetter(it) }
+        .filter { hasPublicGetSet(it) }
 
     fields.addAll(backingFields)
     return fields.toList()
@@ -49,7 +49,7 @@ internal fun getCaseLookups(term: String, settings: KofikoSettings): List<String
     return lookups.toList()
 }
 
-internal fun hasPublicGetterSetter(f: Field): Boolean {
+internal fun hasPublicGetSet(f: Field): Boolean {
     val methodFieldName = f.name.first().toUpperCase() + f.name.substring(1)
     val methods = f.declaringClass.methods
 
