@@ -24,7 +24,7 @@ interface ProfileSupport {
 annotation class ConfigSection(val name: String)
 
 @Target(AnnotationTarget.FIELD)
-annotation class Secret
+annotation class ConfigOption(val name: String = "", val secret: Boolean=false)
 
 class CaseMappingSettings {
     var allowUpper = true
@@ -51,9 +51,10 @@ class KofikoSettings {
 }
 
 data class FieldOverride(
-    val sectionName: String, val field: Field, val oldValue: Any, val newValue: Any, val byProvider: String
+    val field: Field, val sectionName: String, val optionName: String,
+    val oldValue: Any, val newValue: Any, val byProvider: String
 ) {
     override fun toString(): String {
-        return "${sectionName}.${field.name} was changed from <${oldValue}> to <${newValue}> by $byProvider"
+        return "${sectionName}.${optionName} was changed from <${oldValue}> to <${newValue}> by $byProvider"
     }
 }

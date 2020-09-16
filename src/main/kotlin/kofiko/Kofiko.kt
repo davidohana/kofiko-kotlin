@@ -115,39 +115,41 @@ class Kofiko {
 
         val oldValues = fields.map { it.get(configSection) }
         val sectionOverrides = mutableListOf<FieldOverride>()
-        val fieldToProvider = mutableMapOf<String, String>()
 
         if (configSection is ProfileSupport)
             configSection.setProfile(profileName)
 
         val sectionName = getSectionName(configSection)
         val sectionLookups = getSectionNameLookups(sectionName, settings)
-        for (field in fields) {
-            fieldToProvider[field.name] = "Profile ($profileName)"
-            val optionLookups = getOptionNameLookups(field.name, settings)
+        for ((i, field) in fields.withIndex()) {
+            val optionName = getOptionName(field)
+            var oldValue = oldValues[i]
+
+            val optionLookups = getOptionNameLookups(optionName, settings)
             val overrideResult = overrideField(
                 field, configSection, sectionLookups, optionLookups, settings.configProviders
-            ) ?: continue
-            val provider = overrideResult.second
-            fieldToProvider[field.name] = provider::class.java.simpleName
-        }
+            )
 
-        for ((i, field) in fields.withIndex()) {
-            var oldValue = oldValues[i]
-            var newValue = field.get(configSection)
-
-            if (oldValue != newValue) {
-                if (isSecretOption(field)) {
-                    val hiddenToken = "[hidden]"
-                    oldValue = hiddenToken
-                    newValue = hiddenToken
-                }
-
-                val providerName = fieldToProvider[field.name] ?: "unknown"
-                val fieldOverride = FieldOverride(sectionName, field, oldValue, newValue, providerName)
-                settings.onOverride.accept(fieldOverride)
-                sectionOverrides.add(fieldOverride)
+            var providerName = "Profile ($profileName)"
+            if (overrideResult != null) {
+                val provider = overrideResult.second
+                providerName = provider::class.java.simpleName
             }
+
+            var newValue = field.get(configSection)
+            if (oldValue == newValue)
+                continue
+
+            // report that field value changed
+            if (isSecretOption(field)) {
+                val hiddenToken = "[hidden]"
+                oldValue = hiddenToken
+                newValue = hiddenToken
+            }
+
+            val fieldOverride = FieldOverride(field, sectionName, optionName, oldValue, newValue, providerName)
+            settings.onOverride.accept(fieldOverride)
+            sectionOverrides.add(fieldOverride)
         }
 
         _sectionNameToOverrides[sectionName] = sectionOverrides

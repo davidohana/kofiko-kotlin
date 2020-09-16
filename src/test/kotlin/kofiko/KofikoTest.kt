@@ -37,6 +37,8 @@ class KofikoSampleConfig {
     var MyBool1 = false
     var MyBool2 = false
     var MyBool3 = false
+
+    @ConfigOption(name = "Dbl")
     var MyDouble = 234.567
     var MyClass1 = FileWriter::class.java
     var MyClass2 = FileWriter::class.java
@@ -143,7 +145,7 @@ class KofikoTest {
             "my_string2": "xxx",
             "MyBool2": true,
             "MyBool3": 1,
-            "MyDouble": 777.888,
+            "Dbl": 777.888,
             "MyClass2": "java.lang.Thread",
             "MyClass3": "java.io.FileWriter",
             "MyStrList": ["x","y","z"],
@@ -202,7 +204,7 @@ class KofikoTest {
             "${prefix}MyString2" to "xxx",
             "${prefix}MyBool2" to "true",
             "${prefix}MyBool3" to "1",
-            "${prefix}MyDouble" to "777.888",
+            "${prefix}Dbl" to "777.888",
             "${prefix}MyClass2" to "java.lang.Thread",
             "${prefix}MyClass3" to "java.io.FileWriter",
             "${prefix}MyStrList" to "x,y,z",
@@ -237,7 +239,7 @@ class KofikoTest {
             MyString2=xxx
             MyBool2=true
             MyBool3=TRUE
-            MyDouble=777.888
+            Dbl=777.888
             MyClass2=java.lang.Thread
             MyClass3=java.io.FileWriter
             MyStrList=x,y,z
@@ -278,7 +280,7 @@ class KofikoTest {
             "-ov", "kofiko_sample_MyString2=xxx",
             "-ov", "kofiko_sample_MyBool2=true",
             "-ov", "kofiko_sample_MyBool3=TRUE",
-            "-ov", "kofiko_sample_MyDouble=777.888",
+            "-ov", "kofiko_sample_Dbl=777.888",
             "-ov", "kofiko_sample_MyClass2=java.lang.Thread",
             "-ov", "kofiko_sample_MyClass3=java.io.FileWriter",
             "-ov", "kofiko_sample_MyStrList=x,y,z",
@@ -368,8 +370,9 @@ class KofikoTest {
         val overrides = kofiko.sectionNameToOverrides["ProfiledConfig"] ?: error("")
         overrides.shouldContain(
             FieldOverride(
-                "ProfiledConfig",
                 ProfiledConfig::port.javaField!!,
+                "ProfiledConfig",
+                "port",
                 70,
                 8080,
                 "ConfigProviderEnv"
@@ -377,8 +380,9 @@ class KofikoTest {
         )
         overrides.shouldContain(
             FieldOverride(
-                "ProfiledConfig",
                 ProfiledConfig::envName.javaField!!,
+                "ProfiledConfig",
+                "envName",
                 "default",
                 "staging",
                 "Profile (staging)"
@@ -446,12 +450,12 @@ class KofikoTest {
     @Test
     fun testSecretOption() {
         class Config {
-            @Secret
+            @ConfigOption(secret = true)
             var secret = "aaa"
 
             var notSecret = "bbb"
 
-            @Secret
+            @ConfigOption(secret = true)
             var unchangedSecret = "unchanged"
         }
 
@@ -502,7 +506,7 @@ class KofikoTest {
             kofiko-sample_MyString2 = xxx
               kofiko-sample_MyBool2=true
                 kofiko-sample_MyBool3=TRUE  
-            kofiko-sample_MyDouble=777.888  
+            kofiko-sample_Dbl=777.888  
             kofiko-sample_MyClass2=     java.lang.Thread
             kofiko-sample_MyClass3=java.io.FileWriter
             kofiko-sample_MyStrList     =   x,y,z
