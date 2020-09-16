@@ -26,13 +26,17 @@ annotation class ConfigSection(val name: String)
 @Target(AnnotationTarget.FIELD)
 annotation class Secret
 
+class CaseMappingSettings {
+    var allowUpper = true
+    var allowLower = true
+    var allowOriginal = true
+    var allowSnakeUpper = true
+    var allowSnakeLower = true
+    var allowUpperFirstLetter = true
+}
+
 class KofikoSettings {
-    var caseMappingAllowUpper = true
-    var caseMappingAllowLower = true
-    var caseMappingAllowOriginal = true
-    var caseMappingAllowSnakeUpper = true
-    var caseMappingAllowSnakeLower = true
-    var caseMappingAllowUpperFirstLetter = true
+    var caseMapping = CaseMappingSettings()
     var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg")
     var configProviders = mutableListOf<KofikoConfigProvider>()
     var listSeparator = ","
