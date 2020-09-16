@@ -48,6 +48,8 @@ class KofikoSettings {
     var clearContainerPrefix = "^C|"
     var appendContainerPrefix = "^A|"
     var onOverride: OverrideNotifier = OverrideNotifier { }
+    val booleanTrueStates = setOf("true", "1", "on", "yes", "t", "y")
+    val booleanFalseStates = setOf("false", "0", "off", "no", "f", "n")
 }
 
 data class FieldOverride(

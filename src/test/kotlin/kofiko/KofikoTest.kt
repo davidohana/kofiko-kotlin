@@ -31,9 +31,9 @@ object MyCar {
 @Suppress("PropertyName")
 class KofikoSampleConfig {
     var MyInt = 11
-    var MyLong = 55L
+    var MyLong: Long? = 55L
     var MyString1 = "abc"
-    var MyString2 = "def"
+    var MyString2: String? = "def"
     var MyBool1 = false
     var MyBool2 = false
     var MyBool3 = false

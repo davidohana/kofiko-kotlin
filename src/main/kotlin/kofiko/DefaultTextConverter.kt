@@ -65,14 +65,11 @@ class DefaultTextConverter(val settings: KofikoSettings) : TextToTypeConverter {
         return resultList
     }
 
-    val booleanTrueStates = setOf("true", "1", "on", "yes", "t", "y")
-    val booleanFalseStates = setOf("false", "0", "off", "no", "f", "n")
-
     fun parseBooleanExtended(text: String): Boolean {
         val lower = text.toLowerCase()
-        if (lower in booleanTrueStates)
+        if (lower in settings.booleanTrueStates)
             return true
-        if (lower in booleanFalseStates)
+        if (lower in settings.booleanFalseStates)
             return false
         throw IllegalArgumentException("Not a boolean: $text")
     }
