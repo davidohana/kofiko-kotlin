@@ -32,6 +32,8 @@ class CaseMappingSettings {
     var allowOriginal = true
     var allowSnakeUpper = true
     var allowSnakeLower = true
+    var allowKebabLower = true
+    var allowKebabUpper = true
     var allowUpperFirstLetter = true
 }
 

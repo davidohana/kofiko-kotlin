@@ -111,7 +111,7 @@ class KofikoTest {
     fun testGetCaseLookups1() {
         val settings = KofikoSettings()
         val lookups = getCaseLookups("myAge", settings.caseMapping)
-        val expected = listOf("MyAge", "myage", "MYAGE", "myAge", "my_age", "MY_AGE")
+        val expected = listOf("MyAge", "myage", "MYAGE", "myAge", "my_age", "MY_AGE", "my-age", "MY-AGE")
         lookups.shouldContainSame(expected)
     }
 
@@ -130,7 +130,7 @@ class KofikoTest {
         val expected = listOf(
             "DatabaseConfig", "databaseconfig", "DATABASECONFIG",
             "DATABASE_CONFIG", "database_config",
-            "Database", "DATABASE", "database"
+            "Database", "DATABASE", "database", "database-config", "DATABASE-CONFIG"
         )
         lookups.shouldContainSame(expected)
     }

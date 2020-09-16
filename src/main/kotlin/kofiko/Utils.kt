@@ -19,11 +19,11 @@ internal fun <T> getOverridableFields(c: Class<T>): List<Field> {
     return fields.toList()
 }
 
-internal fun camelToSnake(term: String): String {
+internal fun separateCamelCase(term: String, separator: String = "_"): String {
     val regex = "([a-z])([A-Z]+)"
     var str = term
 
-    val replacement = "$1_$2"
+    val replacement = "$1$separator$2"
     str = str.replace(regex.toRegex(), replacement)
     return str
 }
@@ -40,11 +40,19 @@ internal fun getCaseLookups(term: String, settings: CaseMappingSettings): List<S
         lookups.add(term.first().toUpperCase() + term.substring(1))
 
     if (settings.allowSnakeUpper || settings.allowSnakeLower) {
-        val snakeOriginal = camelToSnake(term)
+        val snakeOriginal = separateCamelCase(term, "_")
         if (settings.allowSnakeLower)
             lookups.add(snakeOriginal.toUpperCase())
         if (settings.allowSnakeUpper)
             lookups.add(snakeOriginal.toLowerCase())
+    }
+
+    if (settings.allowKebabUpper || settings.allowKebabLower) {
+        val kebabOriginal = separateCamelCase(term, "-")
+        if (settings.allowKebabLower)
+            lookups.add(kebabOriginal.toUpperCase())
+        if (settings.allowKebabUpper)
+            lookups.add(kebabOriginal.toLowerCase())
     }
     return lookups.toList()
 }
