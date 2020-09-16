@@ -5,10 +5,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 
-class ConfigProviderIni(
-    val iniFile: File
-) : KofikoConfigProvider {
-
+class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
     val sectionNameToProps = parseINI(iniFile)
 
     override fun read(

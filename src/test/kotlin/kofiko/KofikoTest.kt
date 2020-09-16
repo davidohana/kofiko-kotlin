@@ -491,4 +491,40 @@ class KofikoTest {
         kofiko.configure(MyCar)
         MyCar.color.shouldBeEqualTo("blue")
     }
+
+
+    @Test
+    fun testPropertiesProvider() {
+        val content = """
+            kofiko-sample_my_int=33
+            kofiko-sample_MyLong=66
+            kofiko-sample_MyString2=xxx
+            kofiko-sample_MyBool2=true
+            kofiko-sample_MyBool3=TRUE
+            kofiko-sample_MyDouble=777.888
+            kofiko-sample_MyClass2=java.lang.Thread
+            kofiko-sample_MyClass3=java.io.FileWriter
+            kofiko-sample_MyStrList=x,y,z
+            kofiko-sample_MyStrList2=^A|xx
+            kofiko-sample_MyIntList=1,3,5
+            kofiko-sample_MyLongList=1,3,5
+            kofiko-sample_MyFloatList=4.1,4.2,4.3
+            kofiko-sample_MyDoubleList=5.1,5.2,5.3
+            kofiko-sample_MyBooleanList=false,false,false,true
+            kofiko-sample_MyDict1=a:10,c:30
+            kofiko-sample_MyDict3=^C|
+            kofiko-sample_MyDict4=^C|a:10,c:30
+            kofiko-sample_MyIntToFloatDict=1:1.3,2:2.3""".trimIndent()
+
+        val properties = content.toProperties()
+        val provider = ConfigProviderProperties(properties)
+        val settings = KofikoSettings()
+        settings.configProviders.add(provider)
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = KofikoSampleConfig()
+        kofiko.configure(cfg)
+        assertExpectedConfig(cfg)
+    }
+
 }
