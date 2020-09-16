@@ -496,15 +496,16 @@ class KofikoTest {
     @Test
     fun testPropertiesProvider() {
         val content = """
-            kofiko-sample_my_int=33
-            kofiko-sample_MyLong=66
-            kofiko-sample_MyString2=xxx
-            kofiko-sample_MyBool2=true
-            kofiko-sample_MyBool3=TRUE
-            kofiko-sample_MyDouble=777.888
-            kofiko-sample_MyClass2=java.lang.Thread
+            # comment
+            "kofiko-sample_my_int"="33"
+            'kofiko-sample_MyLong'='66'
+            kofiko-sample_MyString2 = xxx
+              kofiko-sample_MyBool2=true
+                kofiko-sample_MyBool3=TRUE  
+            kofiko-sample_MyDouble=777.888  
+            kofiko-sample_MyClass2=     java.lang.Thread
             kofiko-sample_MyClass3=java.io.FileWriter
-            kofiko-sample_MyStrList=x,y,z
+            kofiko-sample_MyStrList     =   x,y,z
             kofiko-sample_MyStrList2=^A|xx
             kofiko-sample_MyIntList=1,3,5
             kofiko-sample_MyLongList=1,3,5
