@@ -3,18 +3,19 @@ package kofiko
 import java.io.File
 import java.util.*
 
-private val stripChars = charArrayOf('"', '\'')
-
-class ConfigProviderProperties(
+open class ConfigProviderProperties(
     properties: Properties,
     prefix: String = "",
-    sectionToOptionSeparator: String = "_",
+    sectionToOptionSeparator: String = ".",
 ) : ConfigProviderMap(
+    properties
+        .mapKeys { it.key.toString() }
+        .mapValues { it.value.toString() },
     prefix,
     sectionToOptionSeparator,
-    properties
-        .mapKeys { it.key.toString().trim(*stripChars).trim() }
-        .mapValues { it.value.toString().trim(*stripChars).trim() })
+    trimWhitespace = true,
+    trimQuotes = false
+)
 
 fun File.loadProperties(): Properties {
     val properties = Properties()

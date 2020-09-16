@@ -521,6 +521,42 @@ class KofikoTest {
     fun testPropertiesProvider() {
         val content = """
             # comment
+            kofiko-sample.my_int=33
+            kofiko-sample.MyLong=66
+            kofiko-sample.MyString2 = xxx
+             kofiko-sample.MyBool2=true
+                kofiko-sample.MyBool3=TRUE  
+            kofiko-sample.Dbl=777.888  
+            kofiko-sample.MyClass2=     java.lang.Thread
+            kofiko-sample.MyClass3=java.io.FileWriter
+            kofiko-sample.MyStrList     =   x,y,z
+            
+            kofiko-sample.MyStrList2=^A|xx
+            kofiko-sample.MyIntList=1,3,5
+            kofiko-sample.MyLongList=1,3,5
+            kofiko-sample.MyFloatList=4.1,4.2,4.3
+            kofiko-sample.MyDoubleList=5.1,5.2,5.3
+            kofiko-sample.MyBooleanList=false,false,false,true
+            kofiko-sample.MyDict1=a:10,c:30
+            kofiko-sample.MyDict3=^C|
+            kofiko-sample.MyDict4=^C|a:10,c:30
+            kofiko-sample.MyIntToFloatDict=1:1.3,2:2.3""".trimIndent()
+
+        val properties = content.toProperties()
+        val provider = ConfigProviderProperties(properties)
+        val settings = KofikoSettings()
+        settings.configProviders.add(provider)
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = KofikoSampleConfig()
+        kofiko.configure(cfg)
+        assertExpectedConfig(cfg)
+    }
+
+    @Test
+    fun testEnvFileProvider() {
+        val content = """
+            # comment
             "kofiko-sample_my_int"="33"
             'kofiko-sample_MyLong'='66'
             kofiko-sample_MyString2 = xxx
@@ -541,8 +577,13 @@ class KofikoTest {
             kofiko-sample_MyDict4=^C|a:10,c:30
             kofiko-sample_MyIntToFloatDict=1:1.3,2:2.3""".trimIndent()
 
-        val properties = content.toProperties()
-        val provider = ConfigProviderProperties(properties)
+        val path = Paths.get("test_cfg")
+        Files.createDirectories(path)
+        val name = object {}.javaClass.enclosingMethod.name
+        val filePath = path.resolve(name)
+        Files.writeString(filePath, content)
+
+        val provider = ConfigProviderEnvFile(filePath.toFile())
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
