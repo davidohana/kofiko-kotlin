@@ -496,6 +496,26 @@ class KofikoTest {
         MyCar.color.shouldBeEqualTo("blue")
     }
 
+    @Test
+    fun testDataClass() {
+
+        data class TheData(var dummy: Int = 1)
+
+
+        val settings = KofikoSettings()
+        settings.onOverride = PrintOverrideNotifier()
+
+        val env = mapOf(
+            "the_data_dummy" to "3",
+        )
+
+        settings.configProviders.add(ConfigProviderEnv(env = env))
+        val kofiko = Kofiko(settings)
+        val cfg = TheData()
+        kofiko.configure(cfg)
+        cfg.dummy.shouldBeEqualTo(3)
+    }
+
 
     @Test
     fun testPropertiesProvider() {
