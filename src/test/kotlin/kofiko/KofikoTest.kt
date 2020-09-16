@@ -142,7 +142,7 @@ class KofikoTest {
             "MY_LONG": 66,
             "my_string2": "xxx",
             "MyBool2": true,
-            "MyBool3": true,
+            "MyBool3": 1,
             "MyDouble": 777.888,
             "MyClass2": "java.lang.Thread",
             "MyClass3": "java.io.FileWriter",
@@ -201,7 +201,7 @@ class KofikoTest {
             "${prefix}MyLong" to "66",
             "${prefix}MyString2" to "xxx",
             "${prefix}MyBool2" to "true",
-            "${prefix}MyBool3" to "TRUE",
+            "${prefix}MyBool3" to "1",
             "${prefix}MyDouble" to "777.888",
             "${prefix}MyClass2" to "java.lang.Thread",
             "${prefix}MyClass3" to "java.io.FileWriter",
@@ -211,7 +211,7 @@ class KofikoTest {
             "${prefix}MyLongList" to "1,3,5",
             "${prefix}MyFloatList" to "4.1,4.2,4.3",
             "${prefix}MyDoubleList" to "5.1,5.2,5.3",
-            "${prefix}MyBooleanList" to "false,false,false,true",
+            "${prefix}MyBooleanList" to "FALSE,f,no,y",
             "${prefix}MyDict1" to "a:10,c:30",
             "${prefix}MyDict3" to "^C|",
             "${prefix}MyDict4" to "^C|a:10,c:30",
@@ -246,7 +246,7 @@ class KofikoTest {
             MyLongList=1,3,5
             MyFloatList=4.1,4.2,4.3
             MyDoubleList=5.1,5.2,5.3
-            MyBooleanList=false,false,false,true
+            MyBooleanList=0,off,n,YES
             MyDict1=a:10,c:30
             MyDict3=^C|
             MyDict4=^C|a:10,c:30
@@ -287,7 +287,7 @@ class KofikoTest {
             "-ov", "kofiko_sample_MyLongList=1,3,5",
             "-ov", "kofiko_sample_MyFloatList=4.1,4.2,4.3",
             "-ov", "kofiko_sample_MyDoubleList=5.1,5.2,5.3",
-            "-ov", "kofiko_sample_MyBooleanList=false,false,false,true",
+            "-ov", "kofiko_sample_MyBooleanList=f,0,0,t",
             "-ov", "kofiko_sample_MyDict1=a:10,c:30",
             "-ov", "kofiko_sample_MyDict3=^C|",
             "-ov", "kofiko_sample_MyDict4=^C|a:10,c:30",
