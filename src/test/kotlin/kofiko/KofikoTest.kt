@@ -635,4 +635,26 @@ class KofikoTest {
         cfg.myDate.shouldBeEqualTo(expDate)
     }
 
+    @Test
+    fun testParseComplexObject() {
+        class Person {
+            var name: String = ""
+            var age: Int = 0
+        }
+
+        class TestSection {
+            var me = Person()
+        }
+
+        val map = mapOf("test_section_me" to """ { "name": "Dave", "age": 41 } """)
+
+        val settings = KofikoSettings(ConfigProviderMap(map))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = TestSection()
+        kofiko.configure(cfg)
+        cfg.me.name.shouldBeEqualTo("Dave")
+        cfg.me.age.shouldBeEqualTo(41)
+    }
+
 }
