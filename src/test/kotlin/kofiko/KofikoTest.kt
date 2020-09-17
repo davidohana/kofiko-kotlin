@@ -8,7 +8,6 @@ import org.junit.Test
 import java.awt.Color
 import java.io.BufferedWriter
 import java.io.FileWriter
-import java.lang.reflect.Modifier
 import java.nio.file.AccessMode
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -254,11 +253,11 @@ class KofikoTest {
             MyStrList=x,y,z
             MyStrList2=^A|xx
             MyIntList=1,3,5
-            MyLongList=1,3,5
+            MyLongList=[1, 3, 5]
             MyFloatList=4.1,4.2,4.3
             MyDoubleList=5.1,5.2,5.3
             MyBooleanList=0,off,n,YES
-            MyDict1=a:10,c:30
+            MyDict1={"a":10, "c":30}
             MyDict3=^C|
             MyDict4=^C|a:10,c:30
             MyIntToFloatDict=1:1.3,2:2.3
