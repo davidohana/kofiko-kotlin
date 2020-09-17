@@ -3,6 +3,7 @@
 package kofiko
 
 import java.lang.reflect.Field
+import java.lang.reflect.Type
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -80,6 +81,7 @@ class Kofiko {
         return newValue
     }
 
+
     private fun overrideField(
         field: Field,
         configObject: Any,
@@ -101,8 +103,7 @@ class Kofiko {
                     }
 
                     if (newValue is String) {
-                        val textToTypeConverter = DefaultTextConverter(settings)
-                        newValue = textToTypeConverter.convert(newValue, field.genericType)
+                        newValue = parseText(settings.textParsers, newValue, field.genericType)
                     }
                     val oldValue = field.get(configObject)
                     val mergedValue = mergeContainers(oldValue, newValue)

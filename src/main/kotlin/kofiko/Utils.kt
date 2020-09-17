@@ -2,6 +2,8 @@ package kofiko
 
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 internal fun <T> getOverridableFields(c: Class<T>): List<Field> {
     val allFields = c.declaredFields
@@ -118,3 +120,27 @@ internal fun isSecretOption(field: Field): Boolean {
     val annotation = field.getAnnotation(ConfigOption::class.java) ?: return false
     return annotation.secret
 }
+
+internal fun parseText(parsers: List<TextParser>, textValue: String, targetType: Type): Any {
+    for (parser in parsers) {
+        val parseResult = parser.parse(textValue, targetType)
+        if (parseResult != null) {
+            println("$textValue parsed to $targetType by $parser")
+            return parseResult
+        }
+    }
+
+    throw NotImplementedError(
+        "conversion of '$textValue' to $targetType is not supported by any of the registered parsers"
+    )
+}
+
+internal fun isGenericContainer(type: Type, expectedRawType: Class<*>): Boolean {
+    if (type !is ParameterizedType)
+        return false
+
+    val rawType = type.rawType as Class<*> ?: return false
+
+    return rawType.isAssignableFrom(expectedRawType)
+}
+

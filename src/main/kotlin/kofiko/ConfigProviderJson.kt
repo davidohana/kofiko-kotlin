@@ -16,9 +16,11 @@ class ConfigProviderJson(
         option: String,
         type: Type,
     ): Any? {
-        val sectionNode = jsonNodes.mapNotNull { it.get(section) }.firstOrNull() ?: return null
+        val sectionNode = jsonNodes
+            .asSequence()
+            .mapNotNull { it.get(section) }
+            .firstOrNull() ?: return null
         val optionNode = sectionNode.get(option) ?: return null
-
         val javaType = TypeFactory.defaultInstance().constructType(type)
         return objectMapper.readerFor(javaType).readValue(optionNode)
     }

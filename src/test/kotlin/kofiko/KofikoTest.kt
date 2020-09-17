@@ -8,6 +8,8 @@ import org.junit.Test
 import java.awt.Color
 import java.io.BufferedWriter
 import java.io.FileWriter
+import java.lang.reflect.Modifier
+import java.nio.file.AccessMode
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.reflect.jvm.javaField
@@ -27,6 +29,7 @@ object MyCar {
     var color = "red"
 }
 
+enum class Colors { Red, Green, Blue }
 
 @Suppress("PropertyName")
 class KofikoSampleConfig {
@@ -56,6 +59,8 @@ class KofikoSampleConfig {
     var MyDict4 = mapOf("a" to 1, "b" to 2)
     var MyDict5 = mapOf("a" to 1, "b" to 2)
     var MyIntToFloatDict = mapOf(1 to 1.1, 2 to 2.2)
+    var MyColor = Colors.Red
+    var MyAccessMode = AccessMode.EXECUTE
 
     companion object {
         val instance = KofikoSampleConfig()
@@ -158,7 +163,9 @@ class KofikoTest {
             "MyDict1": {"a" : 10, "c": 30},
             "MyDict3": {"^C|": 0},
             "MyDict4": {"^C|": 0, "a" : 10, "c": 30},
-            "MyIntToFloatDict": {"1":1.3, "2":2.3}
+            "MyIntToFloatDict": {"1":1.3, "2":2.3},
+            "MyColor": "Green",
+            "MyAccessMode": "READ"
     }
     """
     }
@@ -218,6 +225,8 @@ class KofikoTest {
             "${prefix}MyDict3" to "^C|",
             "${prefix}MyDict4" to "^C|a:10,c:30",
             "${prefix}MyIntToFloatDict" to "1:1.3,2:2.3",
+            "${prefix}MyColor" to "Green",
+            "${prefix}MyAccessMode" to "READ",
         )
 
         val provider = ConfigProviderEnv("test", ":", env)
@@ -253,6 +262,8 @@ class KofikoTest {
             MyDict3=^C|
             MyDict4=^C|a:10,c:30
             MyIntToFloatDict=1:1.3,2:2.3
+            MyColor=Green
+            MyAccessMode=READ
         """.trimIndent()
 
         val path = Paths.get("test_cfg")
@@ -295,6 +306,8 @@ class KofikoTest {
             "-ov", "kofiko_sample_MyDict4=^C|a:10,c:30",
             "-ov", "kofiko_sample_MyDict5=a:1,b:2",
             "-ov", "kofiko_sample_MyIntToFloatDict=1:1.3,2:2.3",
+            "-ov", "kofiko_sample_MyColor=Green",
+            "-ov", "kofiko_sample_MyAccessMode=READ",
             "-ov",
         )
 
@@ -339,6 +352,8 @@ class KofikoTest {
         cfg.MyDict4.shouldBeEqualTo(mapOf("a" to 10, "c" to 30))
         cfg.MyDict5.shouldBeEqualTo(mapOf("a" to 1, "b" to 2))
         cfg.MyIntToFloatDict.shouldBeEqualTo(mapOf(1 to 1.3, 2 to 2.3))
+        cfg.MyColor.shouldBeEqualTo(Colors.Green)
+        cfg.MyAccessMode.shouldBeEqualTo(AccessMode.READ)
     }
 
     @Test
@@ -540,7 +555,10 @@ class KofikoTest {
             kofiko-sample.MyDict1=a:10,c:30
             kofiko-sample.MyDict3=^C|
             kofiko-sample.MyDict4=^C|a:10,c:30
-            kofiko-sample.MyIntToFloatDict=1:1.3,2:2.3""".trimIndent()
+            kofiko-sample.MyIntToFloatDict=1:1.3,2:2.3
+            kofiko-sample.MyColor=Green
+            kofiko-sample.MyAccessMode=READ
+            """.trimIndent()
 
         val properties = content.toProperties()
         val provider = ConfigProviderProperties(properties)
@@ -575,7 +593,10 @@ class KofikoTest {
             kofiko-sample_MyDict1=a:10,c:30
             kofiko-sample_MyDict3=^C|
             kofiko-sample_MyDict4=^C|a:10,c:30
-            kofiko-sample_MyIntToFloatDict=1:1.3,2:2.3""".trimIndent()
+            kofiko-sample_MyIntToFloatDict=1:1.3,2:2.3
+            kofiko-sample_MyColor=Green
+            kofiko-sample_MyAccessMode=READ
+            """.trimIndent()
 
         val path = Paths.get("test_cfg")
         Files.createDirectories(path)

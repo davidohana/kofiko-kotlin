@@ -1,5 +1,9 @@
 package kofiko
 
+import kofiko.parsers.BooleanParser
+import kofiko.parsers.ConciseListParser
+import kofiko.parsers.ConciseMapParser
+import kofiko.parsers.JsonParser
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 
@@ -8,8 +12,8 @@ fun interface KofikoConfigProvider {
     fun read(section: String, option: String, type: Type): Any?
 }
 
-fun interface TextToTypeConverter {
-    fun convert(textValue: String, targetType: Type): Any
+interface TextParser {
+    fun parse(textValue: String, targetType: Type): Any?
 }
 
 fun interface OverrideNotifier {
@@ -24,7 +28,7 @@ interface ProfileSupport {
 annotation class ConfigSection(val name: String)
 
 @Target(AnnotationTarget.FIELD)
-annotation class ConfigOption(val name: String = "", val secret: Boolean=false)
+annotation class ConfigOption(val name: String = "", val secret: Boolean = false)
 
 class CaseMappingSettings {
     var allowUpper = true
@@ -48,8 +52,14 @@ class KofikoSettings {
     var clearContainerPrefix = "^C|"
     var appendContainerPrefix = "^A|"
     var onOverride: OverrideNotifier = OverrideNotifier { }
-    val booleanTrueStates = setOf("true", "1", "on", "yes", "t", "y")
-    val booleanFalseStates = setOf("false", "0", "off", "no", "f", "n")
+    var booleanTrueStates = mutableSetOf("true", "1", "on", "yes", "t", "y")
+    var booleanFalseStates = mutableSetOf("false", "0", "off", "no", "f", "n")
+    var textParsers = listOf(
+        BooleanParser(this),
+        JsonParser(),
+        ConciseListParser(this),
+        ConciseMapParser(this),
+    )
 }
 
 data class FieldOverride(
