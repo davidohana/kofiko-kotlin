@@ -46,7 +46,6 @@ class ConfigProviderJsonFolder(
         section: String,
         option: String,
         type: Type,
-        typeConverter: TextToTypeConverter
     ): Any? {
         val sectionNode = getSectionNode(section.toLowerCase())
         val optionNode = sectionNode.get(option) ?: return null

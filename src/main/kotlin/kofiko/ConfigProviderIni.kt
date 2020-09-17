@@ -12,11 +12,9 @@ class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
         section: String,
         option: String,
         type: Type,
-        typeConverter: TextToTypeConverter
     ): Any? {
         val sectionProperties = sectionNameToProps[section] ?: return null
-        val optionText = sectionProperties[option] ?: return null
-        return typeConverter.convert(optionText.toString(), type)
+        return sectionProperties[option]
     }
 
     companion object {

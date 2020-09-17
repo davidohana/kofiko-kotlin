@@ -87,18 +87,22 @@ class Kofiko {
         optionLookups: List<String>,
         readers: List<KofikoConfigProvider>,
     ): Pair<Any, KofikoConfigProvider>? {
-        val textToTypeConverter = DefaultTextConverter(settings)
 
         for (provider in readers) {
             for (sectionName in sectionLookups) {
                 for (optionName in optionLookups) {
-                    val newValue = try {
-                        provider.read(sectionName, optionName, field.genericType, textToTypeConverter) ?: continue
+                    var newValue = try {
+                        provider.read(sectionName, optionName, field.genericType) ?: continue
                     } catch (ex: Exception) {
                         throw RuntimeException(
                             "Failed to read override value for section=$sectionName, option=$optionName by provider $provider",
                             ex
                         )
+                    }
+
+                    if (newValue is String) {
+                        val textToTypeConverter = DefaultTextConverter(settings)
+                        newValue = textToTypeConverter.convert(newValue, field.genericType)
                     }
                     val oldValue = field.get(configObject)
                     val mergedValue = mergeContainers(oldValue, newValue)

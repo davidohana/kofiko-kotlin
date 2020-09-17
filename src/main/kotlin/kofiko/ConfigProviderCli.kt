@@ -24,10 +24,8 @@ class ConfigProviderCli(
         section: String,
         option: String,
         type: Type,
-        typeConverter: TextToTypeConverter
     ): Any? {
         val key = section + sectionToOptionSeparator + option
-        val valueStr = overrides[key] ?: return null
-        return typeConverter.convert(valueStr, type)
+        return overrides[key]
     }
 }

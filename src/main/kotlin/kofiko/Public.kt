@@ -5,7 +5,7 @@ import java.lang.reflect.Type
 
 
 fun interface KofikoConfigProvider {
-    fun read(section: String, option: String, type: Type, typeConverter: TextToTypeConverter): Any?
+    fun read(section: String, option: String, type: Type): Any?
 }
 
 fun interface TextToTypeConverter {

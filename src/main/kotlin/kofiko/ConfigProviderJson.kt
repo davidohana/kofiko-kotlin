@@ -15,7 +15,6 @@ class ConfigProviderJson(
         section: String,
         option: String,
         type: Type,
-        typeConverter: TextToTypeConverter
     ): Any? {
         val sectionNode = jsonNodes.mapNotNull { it.get(section) }.firstOrNull() ?: return null
         val optionNode = sectionNode.get(option) ?: return null

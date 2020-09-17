@@ -52,10 +52,8 @@ open class ConfigProviderMap(
         section: String,
         option: String,
         type: Type,
-        typeConverter: TextToTypeConverter
     ): Any? {
         val key = getKey(section, option)
-        val valueStr = trimmedMap[key] ?: return null
-        return typeConverter.convert(valueStr, type)
+        return trimmedMap[key]
     }
 }
