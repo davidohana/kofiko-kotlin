@@ -31,7 +31,7 @@ class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
                     ),
                         Properties().also {
                             section = it
-                        }) else section!!.put(key, value)
+                        }) else section!!.put(key, value.toString().trim())
                 }
             }.load(file.reader())
             return result

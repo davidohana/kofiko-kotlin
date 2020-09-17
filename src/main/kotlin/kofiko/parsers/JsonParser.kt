@@ -1,15 +1,13 @@
 package kofiko.parsers
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.databind.type.TypeFactory
+import kofiko.KofikoSettings
 import kofiko.TextParser
 import java.lang.reflect.Type
 
 @Suppress("LiftReturnOrAssignment")
-class JsonParser : TextParser {
-    val objectMapper: ObjectMapper = ObjectMapper()
-
+class JsonParser(val settings: KofikoSettings) : TextParser {
     fun tryParse(textValue: String, reader: ObjectReader): Any? {
         try {
             return reader.readValue(textValue)
@@ -22,7 +20,7 @@ class JsonParser : TextParser {
         val reader: ObjectReader
         try {
             val javaType = TypeFactory.defaultInstance().constructType(targetType)
-            reader = objectMapper.readerFor(javaType)!!
+            reader = settings.objectMapper.readerFor(javaType)!!
         } catch (x: Throwable) {
             return null
         }

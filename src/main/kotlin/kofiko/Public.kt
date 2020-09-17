@@ -1,5 +1,6 @@
 package kofiko
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import kofiko.parsers.BooleanParser
 import kofiko.parsers.ConciseListParser
 import kofiko.parsers.ConciseMapParser
@@ -41,7 +42,11 @@ class CaseMappingSettings {
     var allowUpperFirstLetter = true
 }
 
-class KofikoSettings {
+class KofikoSettings() {
+    constructor(vararg providers: KofikoConfigProvider) : this() {
+        configProviders.addAll(providers)
+    }
+
     var caseMapping = CaseMappingSettings()
     var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg")
     var configProviders = mutableListOf<KofikoConfigProvider>()
@@ -54,9 +59,10 @@ class KofikoSettings {
     var onOverride: OverrideNotifier = OverrideNotifier { }
     var booleanTrueStates = mutableSetOf("true", "1", "on", "yes", "t", "y")
     var booleanFalseStates = mutableSetOf("false", "0", "off", "no", "f", "n")
+    var objectMapper = ObjectMapper()
     var textParsers = listOf(
         BooleanParser(this),
-        JsonParser(),
+        JsonParser(this),
         ConciseListParser(this),
         ConciseMapParser(this),
     )

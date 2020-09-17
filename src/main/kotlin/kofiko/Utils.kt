@@ -139,7 +139,7 @@ internal fun isGenericContainer(type: Type, expectedRawType: Class<*>): Boolean 
     if (type !is ParameterizedType)
         return false
 
-    val rawType = type.rawType as Class<*> ?: return false
+    val rawType = type.rawType as Class<*>
 
     return rawType.isAssignableFrom(expectedRawType)
 }

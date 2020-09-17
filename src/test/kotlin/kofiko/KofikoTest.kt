@@ -11,7 +11,10 @@ import java.io.FileWriter
 import java.nio.file.AccessMode
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.reflect.jvm.javaField
+
 
 @Suppress("PropertyName")
 class Config {
@@ -243,14 +246,14 @@ class KofikoTest {
         val iniText = """
             [KOFIKO_SAMPLE]
             my_int=33
-            MyLong=66
+            MyLong=66     
             MyString2=xxx
             MyBool2=true
-            MyBool3=TRUE
-            Dbl=777.888
-            MyClass2=java.lang.Thread
-            MyClass3=java.io.FileWriter
-            MyStrList=x,y,z
+            MyBool3=   TRUE
+            Dbl=    777.888
+            MyClass2    =java.lang.Thread
+            MyClass3    =   java.io.FileWriter
+                MyStrList=x,y,z
             MyStrList2=^A|xx
             MyIntList=1,3,5
             MyLongList=[1, 3, 5]
@@ -262,6 +265,7 @@ class KofikoTest {
             MyDict4=^C|a:10,c:30
             MyIntToFloatDict={"1":1.3,"2":2.3}
             MyColor=Green
+            #comment            
             MyAccessMode=READ
         """.trimIndent()
 
@@ -611,6 +615,24 @@ class KofikoTest {
         val cfg = KofikoSampleConfig()
         kofiko.configure(cfg)
         assertExpectedConfig(cfg)
+    }
+
+    @Test
+    fun testParseDate() {
+        class TestSection {
+            var myDate = Date(0)
+        }
+
+        val map = mapOf("test_section_my_date" to "2020-09-18 17:24:44")
+
+        val settings = KofikoSettings(ConfigProviderMap(map))
+        settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = TestSection()
+        kofiko.configure(cfg)
+        val expDate = GregorianCalendar(2020, Calendar.SEPTEMBER, 18, 17, 24, 44).time
+        cfg.myDate.shouldBeEqualTo(expDate)
     }
 
 }
