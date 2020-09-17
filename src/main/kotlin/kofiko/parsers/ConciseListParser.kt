@@ -38,10 +38,10 @@ class ConciseListParser(val settings: KofikoSettings) : TextParser {
         if (!isGenericContainer(targetType, List::class.java))
             return null
 
-        return try {
-            convertStringToList(textValue, targetType)
-        } catch (ex: Exception) {
-            null
+        try {
+            return convertStringToList(textValue, targetType)
+        } catch (ex: Throwable) {
+            return null
         }
     }
 }

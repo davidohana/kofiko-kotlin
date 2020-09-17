@@ -260,7 +260,7 @@ class KofikoTest {
             MyDict1={"a":10, "c":30}
             MyDict3=^C|
             MyDict4=^C|a:10,c:30
-            MyIntToFloatDict=1:1.3,2:2.3
+            MyIntToFloatDict={"1":1.3,"2":2.3}
             MyColor=Green
             MyAccessMode=READ
         """.trimIndent()

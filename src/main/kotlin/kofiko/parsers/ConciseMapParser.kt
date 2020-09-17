@@ -51,10 +51,10 @@ class ConciseMapParser(val settings: KofikoSettings) : TextParser {
         if (!isGenericContainer(targetType, Map::class.java))
             return null
 
-        return try {
-            convertStringToMap(textValue, targetType)
-        } catch (ex: Exception) {
-            null
+        try {
+            return convertStringToMap(textValue, targetType)
+        } catch (ex: Throwable) {
+            return null
         }
     }
 }
