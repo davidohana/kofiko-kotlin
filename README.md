@@ -6,9 +6,9 @@
 
 ![](docs/kofiko-kotlin.png)
 
-Lightweight and really simple to use configuration library for Kotlin.
+Lightweight, simple and minimal boilerplate configuration library for Kotlin.
 
-##### Define application configuration as Kotlin classes/objects:
+##### Define application configuration as Kotlin classes/objects with baked-in defaults:
 
 ``` kotlin
 object DatabaseConfig {
