@@ -26,8 +26,13 @@ class ConfigProviderJson(
     }
 
     companion object {
-        fun fromFiles(jsonFiles: Collection<File>, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
+        fun fromFiles(vararg jsonFiles: File, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
             val jsonNodes = jsonFiles.map { objectMapper.readTree(it) }
+            return ConfigProviderJson(jsonNodes, objectMapper)
+        }
+
+        fun fromFiles(vararg jsonFilenames: String, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
+            val jsonNodes = jsonFilenames.map { objectMapper.readTree(File(it)) }
             return ConfigProviderJson(jsonNodes, objectMapper)
         }
 
