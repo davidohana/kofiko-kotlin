@@ -146,12 +146,12 @@ class Kofiko {
             configSection.setProfile(profileName)
 
         val sectionName = getSectionName(configSection)
-        val sectionLookups = getSectionNameLookups(sectionName, settings)
+        val sectionLookups = settings.nameLookupProvider.getSectionLookups(sectionName)
         for ((i, field) in fields.withIndex()) {
             val optionName = getOptionName(field)
             var oldValue = oldValues[i]
 
-            val optionLookups = getOptionNameLookups(optionName, settings)
+            val optionLookups = settings.nameLookupProvider.getOptionLookups(optionName)
             val overrideResult = overrideField(
                 field, configSection, sectionLookups, optionLookups, settings.configProviders
             )

@@ -40,35 +40,6 @@ internal fun separateCamelCase(term: String, separator: String = "_"): String {
     return str
 }
 
-internal fun getCaseLookups(term: String, settings: CaseMappingSettings): List<String> {
-    val lookups = mutableSetOf<String>()
-    if (settings.allowOriginal)
-        lookups.add(term)
-    if (settings.allowUpper)
-        lookups.add(term.toUpperCase())
-    if (settings.allowLower)
-        lookups.add(term.toLowerCase())
-    if (settings.allowUpperFirstLetter)
-        lookups.add(term.first().toUpperCase() + term.substring(1))
-
-    if (settings.allowSnakeUpper || settings.allowSnakeLower) {
-        val snakeOriginal = separateCamelCase(term, "_")
-        if (settings.allowSnakeLower)
-            lookups.add(snakeOriginal.toUpperCase())
-        if (settings.allowSnakeUpper)
-            lookups.add(snakeOriginal.toLowerCase())
-    }
-
-    if (settings.allowKebabUpper || settings.allowKebabLower) {
-        val kebabOriginal = separateCamelCase(term, "-")
-        if (settings.allowKebabLower)
-            lookups.add(kebabOriginal.toUpperCase())
-        if (settings.allowKebabUpper)
-            lookups.add(kebabOriginal.toLowerCase())
-    }
-    return lookups.toList()
-}
-
 internal fun hasPublicGetSet(f: Field): Boolean {
     val methodFieldName = f.name.first().toUpperCase() + f.name.substring(1)
     val methods = f.declaringClass.methods
@@ -85,28 +56,6 @@ internal fun hasPublicGetSet(f: Field): Boolean {
     return true
 }
 
-
-internal fun getSectionNameLookups(sectionName: String, settings: KofikoSettings): List<String> {
-    val lookups = mutableSetOf<String>()
-    lookups.addAll(getCaseLookups(sectionName, settings.caseMapping))
-
-    var sectionWithoutTokens = sectionName
-    for (token in settings.sectionLookupDeleteTokens)
-        sectionWithoutTokens = sectionWithoutTokens.replace(token, "")
-
-    // if we get empty section name after all deletions, revert to original name
-    if (sectionWithoutTokens.isEmpty())
-        sectionWithoutTokens = sectionName
-
-    if (sectionWithoutTokens != sectionName)
-        lookups.addAll(getCaseLookups(sectionWithoutTokens, settings.caseMapping))
-
-    return lookups.toList()
-}
-
-internal fun getOptionNameLookups(optionName: String, settings: KofikoSettings): List<String> {
-    return getCaseLookups(optionName, settings.caseMapping).toList()
-}
 
 internal fun getSectionName(obj: Any): String {
     val clazz = obj::class.java

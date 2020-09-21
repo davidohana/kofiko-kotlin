@@ -119,24 +119,24 @@ class KofikoTest {
 
     @Test
     fun testGetCaseLookups1() {
-        val settings = KofikoSettings()
-        val lookups = getCaseLookups("myAge", settings.caseMapping)
+        val lookupProvider = DefaultNameLookupProvider()
+        val lookups = lookupProvider.getCaseLookups("myAge")
         val expected = listOf("MyAge", "myage", "MYAGE", "myAge", "my_age", "MY_AGE", "my-age", "MY-AGE")
         lookups.shouldContainSame(expected)
     }
 
     @Test
     fun testGetCaseLookups2() {
-        val settings = KofikoSettings()
-        val lookups = getCaseLookups("SNAKE_CASE", settings.caseMapping)
+        val lookupProvider = DefaultNameLookupProvider()
+        val lookups = lookupProvider.getCaseLookups("SNAKE_CASE")
         val expected = listOf("SNAKE_CASE", "snake_case")
         lookups.shouldContainSame(expected)
     }
 
     @Test
     fun testGetSectionNameLookups() {
-        val settings = KofikoSettings()
-        val lookups = getSectionNameLookups("DatabaseConfig", settings)
+        val lookupProvider = DefaultNameLookupProvider()
+        val lookups = lookupProvider.getSectionLookups("DatabaseConfig")
         val expected = listOf(
             "DatabaseConfig", "databaseconfig", "DATABASECONFIG",
             "DATABASE_CONFIG", "database_config",
