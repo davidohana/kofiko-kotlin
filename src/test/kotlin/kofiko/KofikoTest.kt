@@ -663,7 +663,7 @@ class KofikoTest {
             var calories = 200
         }
 
-        class Pizza: Food() {
+        class Pizza : Food() {
             var extras = "pine"
         }
 
@@ -677,6 +677,29 @@ class KofikoTest {
         cfg.extras.shouldBeEqualTo("olives")
         cfg.calories.shouldBeEqualTo(300)
 
+    }
+
+    @Test
+    fun testParseSet() {
+        class TestSection {
+            var MySet = setOf("x", "y", "z")
+            var MySet2 = setOf("x", "y", "z")
+        }
+
+        val map = mapOf(
+            "test_section_my_set" to "a,b,x,x",
+            "test_section_my_set2" to "^A|a,b,x,x"
+        )
+
+        val settings = KofikoSettings(ConfigProviderMap(map))
+        settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = TestSection()
+        kofiko.configure(cfg)
+        val expDate = GregorianCalendar(2020, Calendar.SEPTEMBER, 18, 17, 24, 44).time
+        cfg.MySet.shouldBeEqualTo(setOf("x", "b", "a"))
+        cfg.MySet2.shouldBeEqualTo(setOf("x", "b", "a", "y", "z"))
     }
 
 }

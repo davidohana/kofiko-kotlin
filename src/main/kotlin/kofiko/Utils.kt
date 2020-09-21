@@ -154,3 +154,26 @@ internal fun isGenericContainer(type: Type, expectedRawType: Class<*>): Boolean 
     return rawType.isAssignableFrom(expectedRawType)
 }
 
+internal fun convertStringToList(textValue: String, targetType: Type, settings: KofikoSettings): List<Any> {
+    @Suppress("NAME_SHADOWING")
+    var textValue = textValue
+
+    val resultList = mutableListOf<Any>()
+    if (textValue.startsWith(settings.clearContainerPrefix)) {
+        textValue = textValue.substring(settings.clearContainerPrefix.length)
+        resultList.add(settings.clearContainerPrefix)
+    } else if (textValue.startsWith(settings.appendContainerPrefix)) {
+        textValue = textValue.substring(settings.appendContainerPrefix.length)
+        resultList.add(settings.appendContainerPrefix)
+    }
+
+    val textElements = textValue.split(settings.listSeparator)
+    val parameterizedType = targetType as ParameterizedType
+    val listValueType = parameterizedType.actualTypeArguments.first()
+    val parsedList = textElements.map {
+        parseText(settings.textParsers, it, listValueType)
+    }
+
+    resultList.addAll(parsedList)
+    return resultList
+}

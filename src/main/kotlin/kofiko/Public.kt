@@ -1,10 +1,7 @@
 package kofiko
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import kofiko.parsers.BooleanParser
-import kofiko.parsers.ConciseListParser
-import kofiko.parsers.ConciseMapParser
-import kofiko.parsers.JsonParser
+import kofiko.parsers.*
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 
@@ -54,6 +51,7 @@ class KofikoSettings() {
     var keyToValSeparator = ":"
     var appendToDicts = true
     var appendToLists = false
+    var appendToSets = false
     var clearContainerPrefix = "^C|"
     var appendContainerPrefix = "^A|"
     var onOverride: OverrideNotifier = OverrideNotifier { }
@@ -65,6 +63,7 @@ class KofikoSettings() {
         JsonParser(this),
         ConciseListParser(this),
         ConciseMapParser(this),
+        ConciseSetParser(this),
     )
 }
 

@@ -3,7 +3,6 @@
 package kofiko
 
 import java.lang.reflect.Field
-import java.lang.reflect.Type
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -58,9 +57,9 @@ class Kofiko {
             return mergedMap
         }
 
+
         if (oldValue is List<*>) {
             val newList = (newValue as List<*>).toMutableList()
-
             val mergedList = oldValue.toMutableList()
             var shallAppend = settings.appendToLists
             if (newList.contains(settings.clearContainerPrefix)) {
@@ -78,6 +77,28 @@ class Kofiko {
             mergedList.addAll(newList)
             return mergedList
         }
+
+        if (oldValue is Set<*>) {
+            val newSet = (newValue as Set<*>).toMutableSet()
+
+            val mergedSet = oldValue.toMutableSet()
+            var shallAppend = settings.appendToSets
+            if (newSet.contains(settings.clearContainerPrefix)) {
+                shallAppend = false
+                newSet.remove(settings.clearContainerPrefix)
+            }
+            if (newSet.contains(settings.appendContainerPrefix)) {
+                shallAppend = true
+                newSet.remove(settings.appendContainerPrefix)
+            }
+
+            if (!shallAppend)
+                mergedSet.clear()
+
+            mergedSet.addAll(newSet)
+            return mergedSet
+        }
+
         return newValue
     }
 

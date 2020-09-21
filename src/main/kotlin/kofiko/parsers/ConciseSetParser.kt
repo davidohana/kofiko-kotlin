@@ -6,12 +6,12 @@ import kofiko.convertStringToList
 import kofiko.isGenericContainer
 import java.lang.reflect.Type
 
-class ConciseListParser(val settings: KofikoSettings) : TextParser {
-
+class ConciseSetParser(val settings: KofikoSettings) : TextParser {
     override fun parse(textValue: String, targetType: Type): Any? {
-        if (isGenericContainer(targetType, List::class.java)) {
+        if (isGenericContainer(targetType, Set::class.java)) {
             try {
-                return convertStringToList(textValue, targetType, settings)
+                val list = convertStringToList(textValue, targetType, settings)
+                return list.toSet()
             } catch (ex: Throwable) {
                 return null
             }

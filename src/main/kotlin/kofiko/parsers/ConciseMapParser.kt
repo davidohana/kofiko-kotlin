@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 
 class ConciseMapParser(val settings: KofikoSettings) : TextParser {
 
-    fun convertStringToMap(textValue: String, targetType: Type): Any {
+    fun convertStringToMap(textValue: String, targetType: Type): Map<Any, Any> {
         @Suppress("NAME_SHADOWING")
         var textValue = textValue
 
