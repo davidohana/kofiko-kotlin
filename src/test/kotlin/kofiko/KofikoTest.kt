@@ -8,6 +8,7 @@ import org.junit.Test
 import java.awt.Color
 import java.io.BufferedWriter
 import java.io.FileWriter
+import java.math.BigInteger
 import java.nio.file.AccessMode
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -692,14 +693,27 @@ class KofikoTest {
         )
 
         val settings = KofikoSettings(ConfigProviderMap(map))
-        settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
         kofiko.configure(cfg)
-        val expDate = GregorianCalendar(2020, Calendar.SEPTEMBER, 18, 17, 24, 44).time
         cfg.MySet.shouldBeEqualTo(setOf("x", "b", "a"))
         cfg.MySet2.shouldBeEqualTo(setOf("x", "b", "a", "y", "z"))
     }
 
+    @Test
+    fun testParseBigInteger() {
+        class TestSection {
+            var num = BigInteger.ONE
+        }
+
+        val map = mapOf("test_section_num" to "2")
+
+        val settings = KofikoSettings(ConfigProviderMap(map))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = TestSection()
+        kofiko.configure(cfg)
+        cfg.num.shouldBeEqualTo(BigInteger.TWO)
+    }
 }
