@@ -394,7 +394,7 @@ class KofikoTest {
                 "port",
                 70,
                 8080,
-                "ConfigProviderEnv"
+                EnvConfigProvider::class.java.simpleName
             )
         )
         overrides.shouldContain(
