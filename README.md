@@ -55,10 +55,10 @@ Instances of configuration classes may be configured as well.
 For example:
 
 ```shell script
-database_user=davidoh 
-database_password=reallysecret! 
-database_endpoints=prod1,prod2
-log_level=WARNING
+DATABASE_user=davidoh 
+DATABASE_password=reallysecret! 
+DATABASE_endpoints=prod1,prod2
+LOG_level=WARNING
 ```
 
 or:
