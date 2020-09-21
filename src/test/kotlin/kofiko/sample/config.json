@@ -1,0 +1,8 @@
+{
+  "database": {
+    "dbSizeLimits": {
+      "logs": 1,
+      "alerts": 2
+    }
+  }
+}

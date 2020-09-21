@@ -6,6 +6,8 @@ import java.util.*
 
 
 class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
+    constructor(iniFileName: String) : this(File(iniFileName))
+
     val sectionNameToProps = parseINI(iniFile)
 
     override fun read(
@@ -20,6 +22,9 @@ class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
     companion object {
         // ported https://stackoverflow.com/a/41084504/978164
         private fun parseINI(file: File): Map<String, Properties> {
+            if (!file.exists())
+                return emptyMap()
+
             val result = mutableMapOf<String, Properties>()
             object : Properties() {
                 private var section: Properties? = null

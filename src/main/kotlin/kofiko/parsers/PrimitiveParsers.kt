@@ -65,3 +65,4 @@ class ShortParser : TextParser {
         return null
     }
 }
+

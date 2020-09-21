@@ -26,23 +26,29 @@ class ConfigProviderJson(
     }
 
     companion object {
+        fun filesToNodes(jsonFiles: List<File>, objectMapper: ObjectMapper): List<JsonNode> {
+            return jsonFiles.filter { it.exists() }.map { objectMapper.readTree(it) }
+        }
+
         fun fromFiles(vararg jsonFiles: File, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
-            val jsonNodes = jsonFiles.map { objectMapper.readTree(it) }
+            val jsonNodes = filesToNodes(jsonFiles.toList(), objectMapper)
             return ConfigProviderJson(jsonNodes, objectMapper)
         }
 
         fun fromFiles(vararg jsonFilenames: String, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
-            val jsonNodes = jsonFilenames.map { objectMapper.readTree(File(it)) }
+            val jsonFiles = jsonFilenames.map { File(it) }
+            val jsonNodes = filesToNodes(jsonFiles.toList(), objectMapper)
             return ConfigProviderJson(jsonNodes, objectMapper)
         }
 
         fun fromFile(jsonFile: File, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
-            val jsonNodes = listOf(objectMapper.readTree(jsonFile))
+            val jsonNodes = filesToNodes(listOf(jsonFile), objectMapper)
             return ConfigProviderJson(jsonNodes, objectMapper)
         }
 
         fun fromFile(jsonFilename: String, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {
-            return fromFile(File(jsonFilename), objectMapper)
+            val jsonNodes = filesToNodes(listOf(File(jsonFilename)), objectMapper)
+            return ConfigProviderJson(jsonNodes, objectMapper)
         }
 
         fun fromString(json: String, objectMapper: ObjectMapper = ObjectMapper()): ConfigProviderJson {

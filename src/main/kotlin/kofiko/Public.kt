@@ -60,10 +60,11 @@ class KofikoSettings() {
     var objectMapper = ObjectMapper()
     var textParsers = listOf(
         BooleanParser(this),
-        JsonParser(this),
+        LogLevelParser(),
         ConciseListParser(this),
         ConciseMapParser(this),
         ConciseSetParser(this),
+        JsonParser(this),
     )
 }
 
