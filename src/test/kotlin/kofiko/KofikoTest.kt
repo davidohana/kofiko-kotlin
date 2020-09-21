@@ -657,4 +657,26 @@ class KofikoTest {
         cfg.me.age.shouldBeEqualTo(41)
     }
 
+    @Test
+    fun testSectionInheritance() {
+        open class Food {
+            var calories = 200
+        }
+
+        class Pizza: Food() {
+            var extras = "pine"
+        }
+
+        val map = mapOf("pizza_calories" to "300", "pizza_extras" to "olives")
+
+        val settings = KofikoSettings(ConfigProviderMap(map))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = Pizza()
+        kofiko.configure(cfg)
+        cfg.extras.shouldBeEqualTo("olives")
+        cfg.calories.shouldBeEqualTo(300)
+
+    }
+
 }

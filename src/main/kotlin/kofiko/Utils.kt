@@ -5,8 +5,18 @@ import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
+internal fun getInheritedDeclaredFields(c: Class<*>): List<Field> {
+    val fields = mutableListOf<Field>()
+    var clazz: Class<*>? = c
+    while (clazz != null) {
+        fields.addAll(clazz.declaredFields)
+        clazz = clazz.superclass
+    }
+    return fields
+}
+
 internal fun <T> getOverridableFields(c: Class<T>): List<Field> {
-    val allFields = c.declaredFields
+    val allFields = getInheritedDeclaredFields(c)
 
     val fields = allFields
         .filter { Modifier.isPublic(it.modifiers) }
