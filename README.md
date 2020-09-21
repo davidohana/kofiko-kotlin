@@ -1,4 +1,10 @@
-# kofiko-kotlin
-Kode-First Konfiguration for Kotlin
+# kofiko - Code-First Configuration library for Kotlin
 
-(Work in Progress)
+### Overview
+
+*kofiko* = (Ko)de-(Fi)rst (Ko)nfiguration
+
+![](docs/kofiko-kotlin.png)
+
+
+
