@@ -1,3 +1,5 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import java.io.File

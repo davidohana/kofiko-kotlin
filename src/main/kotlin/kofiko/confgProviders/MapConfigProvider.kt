@@ -1,8 +1,10 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import java.lang.reflect.Type
 
-open class ConfigProviderMap(
+open class MapConfigProvider(
     map: Map<String, String>,
     val prefix: String = "",
     val sectionToOptionSeparator: String = "_",

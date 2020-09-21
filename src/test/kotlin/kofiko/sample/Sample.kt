@@ -29,10 +29,10 @@ object LogConfig {
 
 fun main(args: Array<String>) {
     val settings = KofikoSettings(
-        ConfigProviderCli(args),
-        ConfigProviderEnv(),
+        CliConfigProvider(args),
+        EnvConfigProvider(),
         ConfigProviderIni("src/test/kotlin/kofiko/sample/config.ini"),
-        ConfigProviderJson.fromFile("src/test/kotlin/kofiko/sample/config.json")
+        JsonConfigProvider.fromFile("src/test/kotlin/kofiko/sample/config.json")
     )
     settings.onOverride = PrintOverrideNotifier()
     Kofiko.init(settings)

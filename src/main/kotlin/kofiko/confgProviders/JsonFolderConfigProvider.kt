@@ -1,3 +1,5 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -10,7 +12,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.ConcurrentHashMap
 
-class ConfigProviderJsonFolder(
+class JsonFolderConfigProvider(
     val folder: Path,
     val objectMapper: ObjectMapper = ObjectMapper()
 ) : KofikoConfigProvider {

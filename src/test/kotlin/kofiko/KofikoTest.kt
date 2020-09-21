@@ -179,7 +179,7 @@ class KofikoTest {
         val path = Paths.get("test_cfg")
         Files.createDirectories(path)
         Files.writeString(path.resolve("kofiko_sample.json"), json)
-        val provider = ConfigProviderJsonFolder(path)
+        val provider = JsonFolderConfigProvider(path)
 
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
@@ -194,7 +194,7 @@ class KofikoTest {
     fun testJsonFileProvider() {
         var json = getJson()
         json = """ { "kofiko_sample": $json } """
-        val provider = ConfigProviderJson.fromString(json)
+        val provider = JsonConfigProvider.fromString(json)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -232,7 +232,7 @@ class KofikoTest {
             "${prefix}MyAccessMode" to "READ",
         )
 
-        val provider = ConfigProviderEnv("test", ":", env)
+        val provider = EnvConfigProvider("test", ":", env)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -315,7 +315,7 @@ class KofikoTest {
             "-ov",
         )
 
-        val provider = ConfigProviderCli(cliArgs)
+        val provider = CliConfigProvider(cliArgs)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -375,7 +375,7 @@ class KofikoTest {
             "ProfiledConfig_port" to "8080",
         )
 
-        val provider = ConfigProviderEnv(env = env)
+        val provider = EnvConfigProvider(env = env)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -430,7 +430,7 @@ class KofikoTest {
             "ParentOfNested.Config_dummy" to "3",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.configProviders.add(EnvConfigProvider(env = env))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg1 = ParentOfNested.Config()
@@ -457,7 +457,7 @@ class KofikoTest {
             "anno_test" to "2",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
 
         val cfg = AnnotatedSection()
@@ -486,7 +486,7 @@ class KofikoTest {
             "config_not_secret" to "not a secret",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
         kofiko.configure(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
@@ -509,7 +509,7 @@ class KofikoTest {
             "my_car_color" to "blue",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
         kofiko.configure(MyCar)
         MyCar.color.shouldBeEqualTo("blue")
@@ -528,7 +528,7 @@ class KofikoTest {
             "the_data_dummy" to "3",
         )
 
-        settings.configProviders.add(ConfigProviderEnv(env = env))
+        settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
         val cfg = TheData()
         kofiko.configure(cfg)
@@ -565,7 +565,7 @@ class KofikoTest {
             """.trimIndent()
 
         val properties = content.toProperties()
-        val provider = ConfigProviderProperties(properties)
+        val provider = PropertiesConfigProvider(properties)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -608,7 +608,7 @@ class KofikoTest {
         val filePath = path.resolve(name)
         Files.writeString(filePath, content)
 
-        val provider = ConfigProviderEnvFile(filePath.toFile())
+        val provider = EnvFileConfigProvider(filePath.toFile())
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -626,7 +626,7 @@ class KofikoTest {
 
         val map = mapOf("test_section_my_date" to "2020-09-18 17:24:44")
 
-        val settings = KofikoSettings(ConfigProviderMap(map))
+        val settings = KofikoSettings(MapConfigProvider(map))
         settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
@@ -649,7 +649,7 @@ class KofikoTest {
 
         val map = mapOf("test_section_me" to """ { "name": "Dave", "age": 41 } """)
 
-        val settings = KofikoSettings(ConfigProviderMap(map))
+        val settings = KofikoSettings(MapConfigProvider(map))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
@@ -670,7 +670,7 @@ class KofikoTest {
 
         val map = mapOf("pizza_calories" to "300", "pizza_extras" to "olives")
 
-        val settings = KofikoSettings(ConfigProviderMap(map))
+        val settings = KofikoSettings(MapConfigProvider(map))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = Pizza()
@@ -692,7 +692,7 @@ class KofikoTest {
             "test_section_my_set2" to "^A|a,b,x,x"
         )
 
-        val settings = KofikoSettings(ConfigProviderMap(map))
+        val settings = KofikoSettings(MapConfigProvider(map))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
@@ -709,7 +709,7 @@ class KofikoTest {
 
         val map = mapOf("test_section_num" to "2")
 
-        val settings = KofikoSettings(ConfigProviderMap(map))
+        val settings = KofikoSettings(MapConfigProvider(map))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()

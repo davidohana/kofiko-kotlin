@@ -1,13 +1,15 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import java.io.File
 import java.util.*
 
-open class ConfigProviderProperties(
+open class PropertiesConfigProvider(
     properties: Properties,
     prefix: String = "",
     sectionToOptionSeparator: String = ".",
-) : ConfigProviderMap(
+) : MapConfigProvider(
     properties
         .mapKeys { it.key.toString() }
         .mapValues { it.value.toString() },

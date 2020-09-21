@@ -1,8 +1,10 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import java.lang.reflect.Type
 
-class ConfigProviderCli(
+class CliConfigProvider(
     val args: Array<String>,
     val overrideToken: String = "-ov",
     val sectionToOptionSeparator: String = "_",
