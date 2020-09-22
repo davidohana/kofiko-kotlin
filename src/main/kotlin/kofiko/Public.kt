@@ -31,11 +31,11 @@ interface NameLookupProvider {
 }
 
 
-@Target(AnnotationTarget.CLASS)
-annotation class ConfigSection(val name: String)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FIELD)
+annotation class ConfigName(val name: String)
 
 @Target(AnnotationTarget.FIELD)
-annotation class ConfigOption(val name: String = "", val secret: Boolean = false)
+annotation class Secret()
 
 
 data class FieldOverride(

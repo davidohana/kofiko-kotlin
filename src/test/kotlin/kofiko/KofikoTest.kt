@@ -45,7 +45,7 @@ class KofikoSampleConfig {
     var MyBool2 = false
     var MyBool3 = false
 
-    @ConfigOption(name = "Dbl")
+    @ConfigName(name = "Dbl")
     var MyDouble = 234.567
     var MyClass1 = FileWriter::class.java
     var MyClass2 = FileWriter::class.java
@@ -449,7 +449,7 @@ class KofikoTest {
 
     @Test
     fun testAnnotatedConfigSection() {
-        @ConfigSection("anno")
+        @ConfigName("anno")
         class AnnotatedSection {
             var test = 1
         }
@@ -472,12 +472,12 @@ class KofikoTest {
     @Test
     fun testSecretOption() {
         class Config {
-            @ConfigOption(secret = true)
+            @Secret
             var secret = "aaa"
 
             var notSecret = "bbb"
 
-            @ConfigOption(secret = true)
+            @Secret
             var unchangedSecret = "unchanged"
         }
 

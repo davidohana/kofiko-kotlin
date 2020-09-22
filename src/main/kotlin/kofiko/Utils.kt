@@ -59,7 +59,7 @@ internal fun hasPublicGetSet(f: Field): Boolean {
 
 internal fun getSectionName(obj: Any): String {
     val clazz = obj::class.java
-    val annotation = clazz.getAnnotation(ConfigSection::class.java)
+    val annotation = clazz.getAnnotation(ConfigName::class.java)
     if (annotation != null && annotation.name.isNotBlank())
         return annotation.name
 
@@ -69,15 +69,14 @@ internal fun getSectionName(obj: Any): String {
 }
 
 internal fun getOptionName(field: Field): String {
-    val annotation = field.getAnnotation(ConfigOption::class.java)
+    val annotation = field.getAnnotation(ConfigName::class.java)
     if (annotation != null && annotation.name.isNotBlank())
         return annotation.name
     return field.name
 }
 
 internal fun isSecretOption(field: Field): Boolean {
-    val annotation = field.getAnnotation(ConfigOption::class.java) ?: return false
-    return annotation.secret
+    return field.isAnnotationPresent(Secret::class.java)
 }
 
 internal fun parseText(parsers: List<TextParser>, textValue: String, targetType: Type): Any {
