@@ -10,7 +10,7 @@ open class DefaultNameLookupProvider : NameLookupProvider {
     var allowKebabUpper = true
     var allowUpperFirstLetter = true
 
-    var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg")
+    var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg", "Section")
 
     fun getCaseLookups(term: String): List<String> {
         val lookups = mutableSetOf<String>()

@@ -1,11 +1,16 @@
 package kofiko
 
+import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 
 
 fun interface KofikoConfigProvider {
     fun read(section: String, option: String, type: Type): Any?
+}
+
+interface FileProviderFactory {
+    fun createConfigProvider(file: File): KofikoConfigProvider?
 }
 
 interface TextParser {

@@ -2,8 +2,8 @@ package kofiko.parsers
 
 import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.databind.type.TypeFactory
-import kofiko.KofikoSettings
-import kofiko.TextParser
+import kofiko.*
+import java.io.File
 import java.lang.reflect.Type
 
 @Suppress("LiftReturnOrAssignment")
@@ -30,3 +30,4 @@ class JsonParser(val settings: KofikoSettings) : TextParser {
         return tryParse(textValue, reader)
     }
 }
+

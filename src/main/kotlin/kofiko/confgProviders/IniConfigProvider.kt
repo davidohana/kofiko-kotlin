@@ -7,7 +7,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 
-class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
+class IniConfigProvider(iniFile: File) : KofikoConfigProvider {
     constructor(iniFileName: String) : this(File(iniFileName))
 
     val sectionNameToProps = parseINI(iniFile)
@@ -43,5 +43,14 @@ class ConfigProviderIni(iniFile: File) : KofikoConfigProvider {
             }.load(file.reader())
             return result
         }
+    }
+}
+
+@Suppress("unused")
+class IniFileProviderFactory : FileProviderFactory {
+    override fun createConfigProvider(file: File): KofikoConfigProvider? {
+        if (file.extension.toLowerCase() == "ini")
+            return IniConfigProvider(file)
+        return null
     }
 }

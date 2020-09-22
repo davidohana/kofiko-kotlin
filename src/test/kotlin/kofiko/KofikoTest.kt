@@ -7,6 +7,7 @@ import org.amshove.kluent.shouldContainSame
 import org.junit.Test
 import java.awt.Color
 import java.io.BufferedWriter
+import java.io.File
 import java.io.FileWriter
 import java.math.BigInteger
 import java.nio.file.AccessMode
@@ -173,13 +174,18 @@ class KofikoTest {
     """
     }
 
+    fun writeTextFile(name: String, content: String): File {
+        val path = Paths.get("test_cfg")
+        Files.createDirectories(path)
+        Files.writeString(path.resolve(name), content)
+        return path.resolve(name).toFile()
+    }
+
     @Test
     fun testJsonFolderProvider() {
         val json = getJson()
-        val path = Paths.get("test_cfg")
-        Files.createDirectories(path)
-        Files.writeString(path.resolve("kofiko_sample.json"), json)
-        val provider = JsonFolderConfigProvider(path)
+        writeTextFile("kofiko_sample.json", json)
+        val provider = JsonFolderConfigProvider("test_cfg")
 
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
@@ -270,13 +276,10 @@ class KofikoTest {
             MyAccessMode=READ
         """.trimIndent()
 
-        val path = Paths.get("test_cfg")
-        Files.createDirectories(path)
         val name = object {}.javaClass.enclosingMethod.name
-        val iniPath = path.resolve(name)
-        Files.writeString(iniPath, iniText)
+        val iniPath = writeTextFile("$name.ini", iniText)
 
-        val provider = ConfigProviderIni(iniPath.toFile())
+        val provider = IniConfigProvider(iniPath)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -602,13 +605,10 @@ class KofikoTest {
             kofiko-sample_MyAccessMode=READ
             """.trimIndent()
 
-        val path = Paths.get("test_cfg")
-        Files.createDirectories(path)
         val name = object {}.javaClass.enclosingMethod.name
-        val filePath = path.resolve(name)
-        Files.writeString(filePath, content)
+        val filePath = writeTextFile("$name.env", content)
 
-        val provider = EnvFileConfigProvider(filePath.toFile())
+        val provider = EnvFileConfigProvider(filePath)
         val settings = KofikoSettings()
         settings.configProviders.add(provider)
         settings.onOverride = PrintOverrideNotifier()
@@ -715,5 +715,32 @@ class KofikoTest {
         val cfg = TestSection()
         kofiko.configure(cfg)
         cfg.num.shouldBeEqualTo(BigInteger.TWO)
+    }
+
+    @Test
+    fun testFilesProvider() {
+        class TestSection {
+            var num = 1
+            var text = "ttt"
+        }
+
+        val json = """{ "test" : { "num": 2 } }"""
+        val ini = """
+            [TEST]
+            text=aaa
+        """.trimIndent()
+
+        val name = object {}.javaClass.enclosingMethod.name
+        val jsonFile = writeTextFile("$name.JSON", json)
+        val iniFile = writeTextFile("$name.ini", ini)
+
+        val provider = FilesConfigProvider(File("1.json"), jsonFile, iniFile)
+        val settings = KofikoSettings(provider)
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = TestSection()
+        kofiko.configure(cfg)
+        cfg.num.shouldBeEqualTo(2)
+        cfg.text.shouldBeEqualTo("aaa")
     }
 }
