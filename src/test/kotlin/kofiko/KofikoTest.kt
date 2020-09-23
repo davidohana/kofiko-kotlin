@@ -197,12 +197,10 @@ class KofikoTest {
     }
 
     @Test
-    fun testJsonFileProvider() {
+    fun testJsonProvider() {
         var json = getJson()
         json = """ { "kofiko_sample": $json } """
-        val provider = JsonConfigProvider.fromString(json)
-        val settings = KofikoSettings()
-        settings.configProviders.add(provider)
+        val settings = KofikoSettings().add(JsonSource().content(json))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
@@ -276,12 +274,7 @@ class KofikoTest {
             MyAccessMode=READ
         """.trimIndent()
 
-        val name = object {}.javaClass.enclosingMethod.name
-        val iniPath = writeTextFile("$name.ini", iniText)
-
-        val provider = IniConfigProvider(iniPath)
-        val settings = KofikoSettings()
-        settings.configProviders.add(provider)
+        val settings = KofikoSettings().add(IniSource().content(iniText))
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
@@ -734,13 +727,33 @@ class KofikoTest {
         val jsonFile = writeTextFile("$name.JSON", json)
         val iniFile = writeTextFile("$name.ini", ini)
 
-        val provider = FilesConfigProvider(File("1.json"), jsonFile, iniFile)
-        val settings = KofikoSettings(provider)
+        val settings = KofikoSettings()
+            .addFiles(File("1.json"), jsonFile, iniFile)
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
         kofiko.configure(cfg)
         cfg.num.shouldBeEqualTo(2)
         cfg.text.shouldBeEqualTo("aaa")
+    }
+
+    @Test
+    fun testParseQuotedString() {
+        class Test {
+            var str1 = "david"
+            var str2 = "david"
+            var str3 = "david"
+        }
+
+        val map = mapOf("test_str1" to "dave", "test_str2" to """ x="y" """, "test_str3" to "'dummy'")
+
+        val settings = KofikoSettings(MapConfigProvider(map, trimWhitespace = false, trimQuotes = false))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = Test()
+        kofiko.configure(cfg)
+        cfg.str1.shouldBeEqualTo("dave")
+        cfg.str2.shouldBeEqualTo(""" x="y" """)
+        cfg.str3.shouldBeEqualTo("'dummy'")
     }
 }

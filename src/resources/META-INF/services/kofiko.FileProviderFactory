@@ -1,2 +1,3 @@
 kofiko.JsonFileProviderFactory
 kofiko.IniFileProviderFactory
+kofiko.EnvFileProviderFactory

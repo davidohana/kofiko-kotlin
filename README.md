@@ -4,6 +4,8 @@
 
 *kofiko* = (Ko)de-(Fi)rst (Ko)nfiguration
 
+Note: This is work-in-progress. Official first version not released yet. 
+
 ![](docs/kofiko-kotlin.png)
 
 Lightweight, simple and minimal boilerplate configuration library for Kotlin.
