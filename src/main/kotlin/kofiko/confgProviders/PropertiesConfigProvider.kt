@@ -5,7 +5,7 @@ package kofiko
 import java.io.File
 import java.util.*
 
-open class PropertiesConfigProvider(
+class PropertiesConfigProvider(
     properties: Properties,
     prefix: String = "",
     sectionToOptionSeparator: String = ".",
@@ -15,9 +15,13 @@ open class PropertiesConfigProvider(
         .mapValues { it.value.toString() },
     prefix,
     sectionToOptionSeparator,
-    trimWhitespace = true,
-    trimQuotes = false
-)
+) {
+    constructor(
+        configSource: ConfigSource,
+        prefix: String = "",
+        sectionToOptionSeparator: String = "."
+    ) : this(configSource.content.toProperties(), prefix, sectionToOptionSeparator)
+}
 
 fun File.loadProperties(): Properties {
     val properties = Properties()

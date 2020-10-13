@@ -7,4 +7,4 @@ class EnvConfigProvider(
     sectionToOptionSeparator: String = "_",
     env: Map<String, String> = System.getenv()!!
 ) : MapConfigProvider(
-    env, prefix, sectionToOptionSeparator, false, false)
+    env, prefix, sectionToOptionSeparator)

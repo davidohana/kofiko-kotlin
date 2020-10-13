@@ -28,6 +28,7 @@ object LogConfig {
 }
 
 fun main(args: Array<String>) {
+    JsonConfigProvider(ConfigSource("test.json"))
     val settings = KofikoSettings(
         CliConfigProvider(args),
         EnvConfigProvider(),

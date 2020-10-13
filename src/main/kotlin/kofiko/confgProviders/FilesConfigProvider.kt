@@ -6,7 +6,7 @@ import java.io.File
 import java.util.*
 
 
-fun getProvider(file: File): KofikoConfigProvider {
+fun createConfigProvider(file: File): KofikoConfigProvider {
     val serviceLoader = ServiceLoader.load(FileProviderFactory::class.java)
     val factories = serviceLoader.toList()
 
@@ -25,7 +25,7 @@ fun KofikoSettings.addFiles(
         if (!mustExist && !file.exists())
             continue
 
-        val provider = getProvider(file)
+        val provider = createConfigProvider(file)
         this.configProviders.add(provider)
     }
 
