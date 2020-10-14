@@ -51,20 +51,3 @@ fun main(args: Array<String>) {
     Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
     println("Database user is " + DatabaseConfig.user)
 }
-
-class DatabaseConfig1 {
-    var host = "default"
-    var port = 8080
-
-    companion object {
-        val instance = DatabaseConfig1()
-
-        init {
-            Kofiko.configure(instance)
-        }
-    }
-}
-
-class DatabaseConnection(databaseConfig: DatabaseConfig1 = DatabaseConfig1.instance) {
-// ..
-}
