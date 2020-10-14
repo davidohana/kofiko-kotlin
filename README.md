@@ -273,7 +273,7 @@ the name to lookup in config sources.
     
     This will accept `MVAD_th=0.8` as env var override.
 
-* Add `@Secret` annotation to a property in order to old/new values when printing
+* Add `@Secret` annotation to a property in order to hide old/new values when printing
   an override notification.  
   
     ```kotlin
