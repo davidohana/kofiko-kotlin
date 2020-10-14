@@ -306,7 +306,10 @@ print(dbCfg.url)
 
 * You can implement `NameLookupProvider` to provide custom translation from class & 
   field names to keys to look for in config sources. 
-  The provider is enabled by setting `KofikoSettings.nameLookup` to this instance.  
+  The provider is enabled by setting `KofikoSettings.nameLookup` to this instance.
+  
+* You can implement `OverrideNotifier` to provide a custom action when a config 
+  option (field) is changed from its default value.    
 
 
 ### Installation
