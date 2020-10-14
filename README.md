@@ -226,7 +226,7 @@ in insertion order when looking for config option overrides.
 * `textParsers` - List of objects of interface `TextParser`. Those will be invoked 
 in the insertion order when trying to parse a string into a typed field. 
  
-* `objectMapper` - The ObjectMapper that will be used by `JsonParser` when trying to 
+* `objectMapper` - The `ObjectMapper` that will be used by `JsonParser` when trying to 
   parse strings to typed fields.   
 
 
