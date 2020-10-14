@@ -3,17 +3,6 @@ package kofiko
 import com.fasterxml.jackson.databind.ObjectMapper
 import kofiko.parsers.*
 
-class CaseMappingSettings {
-    var allowUpper = true
-    var allowLower = true
-    var allowOriginal = true
-    var allowSnakeUpper = true
-    var allowSnakeLower = true
-    var allowKebabLower = true
-    var allowKebabUpper = true
-    var allowUpperFirstLetter = true
-}
-
 class KofikoSettings() {
     constructor(vararg providers: KofikoConfigProvider) : this() {
         configProviders.addAll(providers)

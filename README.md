@@ -227,7 +227,12 @@ in insertion order when looking for config option overrides.
 in the insertion order when trying to parse a string into a typed field. 
  
 * `objectMapper` - The `ObjectMapper` that will be used by `JsonParser` when trying to 
-  parse strings to typed fields.   
+  parse strings to typed fields.
+  
+* `onOverride` - an action to perform when a field value is changed from default value. 
+  Default action does nothing. It is possible to set to 
+  `PrintOverrideNotifier` or `LogOverrideNotifier` in order to print message to stdout/log 
+  respectively.         
 
 
 ##### Profiles support
