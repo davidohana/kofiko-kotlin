@@ -10,7 +10,7 @@ Note: This is work-in-progress. Official first version not released yet.
 
 Lightweight, simple and minimal boilerplate configuration library for Kotlin.
 
-##### Define application configuration as Kotlin classes/objects with baked-in defaults:
+##### Define application configuration as Kotlin classes/objects:
 
 ``` kotlin
 object DatabaseConfig {
@@ -37,8 +37,10 @@ object LogConfig {
 }
 ```
 
-Config sections are separated to classes so that configuration consumers may 
-receive only the configuration they are interested it.
+Each config section is represented by a class/object so that configuration consumers may 
+receive only the configuration of interest.
+
+Configuration options should be declared as `var` properties (read/write) with baked-in defaults.
    
 Kofiko supports configuring static Kotlin objects for easier access by configuration consumers. 
 Instances of configuration classes may be configured as well.

@@ -212,10 +212,10 @@ class PrintOverrideNotifier : OverrideNotifier {
     }
 }
 
-class LogOverrideNotifier : OverrideNotifier {
+class LogOverrideNotifier(val logLevel: Level = Level.INFO) : OverrideNotifier {
     private val logger = Logger.getLogger(Kofiko::class.java.name)
     override fun accept(override: FieldOverride) {
-        logger.log(Level.INFO, override.toString())
+        logger.log(logLevel, override.toString())
     }
 }
 
