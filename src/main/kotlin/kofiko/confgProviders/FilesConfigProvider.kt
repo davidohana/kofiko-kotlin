@@ -7,7 +7,7 @@ import java.nio.file.Path
 import java.util.*
 
 
-fun createConfigProvider(filename: String): KofikoConfigProvider {
+fun createConfigProvider(filename: String): KofikoConfigProvider? {
     val serviceLoader = ServiceLoader.load(FileProviderFactory::class.java)
     val factories = serviceLoader.toList()
 
@@ -15,14 +15,14 @@ fun createConfigProvider(filename: String): KofikoConfigProvider {
         .asSequence()
         .mapNotNull { it.createConfigProvider(filename) }
         .firstOrNull()
-        ?: throw NotImplementedError("File $filename cannot be handled by any provider")
 }
 
 
 fun KofikoSettings.addFiles(vararg filenames: String) = apply {
     for (filename in filenames) {
         val provider = createConfigProvider(filename)
-        this.configProviders.add(provider)
+        if (provider != null)
+            this.configProviders.add(provider)
     }
 }
 

@@ -79,29 +79,30 @@ looking for lowercase, uppercase, camel-case, snake-case, kebab-case matches.
 #### Initialize Kofiko with the desired configuration sources:
 
 ```kotlin
-val settings = KofikoSettings(
-        ConfigProviderCli(args),
-        ConfigProviderEnv(),
-        ConfigProviderIni("config.ini"),
-        ConfigProviderJson.fromFile("config.json")
-    )
-settings.onOverride = PrintOverrideNotifier()
-Kofiko.init(settings)
+val settings = KofikoSettings()
+        .addCli(args) { this.overrideToken = "-o" }
+        .addEnv()
+        .addSystemProperties()
+        .addFiles("sample_config.json", 
+"sample_config.ini", "sample_config.env", "sample_config.properties")
 
-// use configuration
-Logger.getLogger("test").log(LogConfig.level, "welcome")
-connect(DatabaseConfig.endpoints, DatabaseConfig.user, DatabaseConfig.password)
+    settings.onOverride = PrintOverrideNotifier()  // optional setting to print config settings with non-default value
+    Kofiko.init(settings)
+
+    // configuration is ready to use
+    Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
+    println("Database user is " + DatabaseConfig.user)
 ```
 
-Kofiko can print/log the effective configuration overrides, omitting secrets like passwords.   
+Program output: 
 ```
-WARNING: welcome
-DatabaseConfig.user was changed from <default_user> to <davidoh> by ConfigProviderIni
-DatabaseConfig.password was changed from <[hidden]> to <[hidden]> by ConfigProviderIni
-DatabaseConfig.endpoints was changed from <[http://localhost:1234]> to <[prod1, prod2]> by ConfigProviderIni
-DatabaseConfig.dbSizeLimits was changed from <{alerts=50, logs=200}> to <{alerts=2, logs=1}> by ConfigProviderJson
+LogConfig.level was changed from <INFO> to <WARNING> by IniConfigProvider
+WARNING: Hello Kofiko
+DatabaseConfig.user was changed from <default_user> to <davidoh> by IniConfigProvider
+DatabaseConfig.password was changed from <[hidden]> to <[hidden]> by IniConfigProvider
+DatabaseConfig.endpoints was changed from <[http://localhost:1234]> to <[prod1, prod2]> by IniConfigProvider
+DatabaseConfig.dbSizeLimits was changed from <{alerts=50, logs=200}> to <{alerts=2, logs=1}> by JsonConfigProvider
+Database user is davidoh
 ```
 
-
-
-
+Kofiko can print/log the effective configuration overrides, omitting secret info like passwords.   

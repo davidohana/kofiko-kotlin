@@ -33,17 +33,15 @@ fun main(args: Array<String>) {
         .addCli(args) { this.overrideToken = "-o" }
         .addEnv()
         .addSystemProperties()
-        .addFiles("config.json", "config.ini", "config.env", "config.properties")
+        .addFiles(
+            "sample_config.json", "sample_config.ini",
+            "sample_config.env", "sample_config.properties"
+        )
 
-    settings.onOverride = PrintOverrideNotifier()
+    settings.onOverride = PrintOverrideNotifier()  // optional setting to print config settings with non-default value
     Kofiko.init(settings)
 
-    Logger.getLogger("test").log(LogConfig.level, "welcome")
-
-    connect(DatabaseConfig.endpoints, DatabaseConfig.user, DatabaseConfig.password)
+    // configuration is ready to use
+    Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
+    println("Database user is " + DatabaseConfig.user)
 }
-
-fun connect(endpoint: List<String>, user: String, password: String) {
-    // write your connection code here
-}
-
