@@ -170,13 +170,20 @@ in insertion order when looking for config option overrides.
     Many providers have specific customization options, 
     e.g `objectMapper` for `JsonConfigProvider`
     or `prefix` and `sectionToOptionSeparator` for `EnvConfigProvider` that will define
-    how to resolve config options in env keys (`$prefix_$section_$option`).   
+    how to resolve config options in env keys (`$prefix_$section_$option`).
+    
+    You can also use the `addFiles(filename1, filename2)` extension function which adds 
+    an appropriate ConfigParser according to extension of the specified filename. It 
+    is also possible to specify a filename without extension, which will look for 
+    a filename with any supported extension.  
+    For example: `settings.addFiles("sample_config")` will look for    
+    sample_config.json, sample_config.ini, sample_config.env, sample_config.properties.
 
 * `nameLookup` - a class of interface `NameLookupProvider` which defines how 
    to map between section/option name to a keys in configuration sources.
-   By default, Kofiko will try all casing styles: original, UPPERCASE, LOWERCASE, 
+   By default, Kofiko will try all casing styles: Original, UPPERCASE, lowercase, 
    CamelCase, snake_case, kebab-case.  
-   For example class field `conStr`, Kofiko will attempt to resolve to: 
+   For example, for class field `conStr`, Kofiko will attempt to resolve to: 
    conStr, CONSTR,  constr, ConStr, CON_STR, con_str, CON-STR, con-str.
    
    `sectionLookupDeleteTerms` option defines list of strings to omit when 
@@ -190,6 +197,17 @@ in insertion order when looking for config option overrides.
     settings.nameLookup.allowUpper = false
     settings.nameLookup.sectionLookupDeleteTerms.add("Options")
     ```
+  
+* `listSeparator` - defines the separator string between items 
+  when parsing `List`, `Map`, `Set` data types. 
+  Default is `,`. For example: `red,green,orange`.  
+  
+
+* `keyToValSeparator` - defines the separator string between key and value 
+  when parsing `Map` data type. 
+  Default is `:`. For example: `logs:100,alerts:200`.  
+  
+* appendToDicts
   
 
 
