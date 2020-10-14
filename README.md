@@ -80,18 +80,21 @@ looking for lowercase, uppercase, camel-case, snake-case, kebab-case matches.
 
 ```kotlin
 val settings = KofikoSettings()
-        .addCli(args) { this.overrideToken = "-o" }
-        .addEnv()
-        .addSystemProperties()
-        .addFiles("sample_config.json", 
-"sample_config.ini", "sample_config.env", "sample_config.properties")
+    .addCli(args) { this.overrideToken = "-o" }
+    .addEnv()
+    .addSystemProperties()
+    .addFiles(
+        "sample_config.json", "sample_config.ini",
+        "sample_config.env", "sample_config.properties"
+    )
 
-    settings.onOverride = PrintOverrideNotifier()  // optional setting to print config settings with non-default value
-    Kofiko.init(settings)
+// optional setting to print config options with non-default value
+settings.onOverride = PrintOverrideNotifier()  
+Kofiko.init(settings)
 
-    // configuration is ready to use
-    Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
-    println("Database user is " + DatabaseConfig.user)
+// configuration is ready to use
+Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
+println("Database user is " + DatabaseConfig.user)
 ```
 
 Program output: 

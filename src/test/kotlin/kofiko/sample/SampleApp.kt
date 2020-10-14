@@ -38,7 +38,8 @@ fun main(args: Array<String>) {
             "sample_config.env", "sample_config.properties"
         )
 
-    settings.onOverride = PrintOverrideNotifier()  // optional setting to print config settings with non-default value
+    // optional setting to print config options with non-default value
+    settings.onOverride = PrintOverrideNotifier()
     Kofiko.init(settings)
 
     // configuration is ready to use
