@@ -23,7 +23,7 @@ class KofikoSettings() {
     var configProviders = mutableListOf<KofikoConfigProvider>()
     var listSeparator = ","
     var keyToValSeparator = ":"
-    var appendToDicts = true
+    var appendToMaps = true
     var appendToLists = false
     var appendToSets = false
     var clearContainerPrefix = "^C|"

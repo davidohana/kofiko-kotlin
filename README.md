@@ -202,13 +202,32 @@ in insertion order when looking for config option overrides.
   when parsing `List`, `Map`, `Set` data types. 
   Default is `,`. For example: `red,green,orange`.  
   
-
 * `keyToValSeparator` - defines the separator string between key and value 
   when parsing `Map` data type. 
   Default is `:`. For example: `logs:100,alerts:200`.  
   
-* appendToDicts
+* `appendToLists` and `appendToSets` - For `List` and `Set` types, whether to append to default list value or 
+  replace entire list. Default is false (replace).  
+
+* `appendToDicts` - For `Map` type, whether to append/overwrite default map keys value or 
+  replace entire map. Default is true (append/overwrite).
   
+* `clearContainerPrefix` - Regardless of the `appendTo*` setting, when 
+  override string is prefixed by this string, Kofiko will clear the container before
+  adding new elements. Default prefix is `^C|`. For example `"^C|item1,item2"`.      
+
+* `appendContainerPrefix` - Regardless of the `appendTo*` setting, when 
+  override string is prefixed by this string, Kofiko will append/overwrite elements in 
+  the container. Default prefix is `^A|`. For example `"^A|key1:val1,key2:val2"`.
+
+* `booleanTrueStates` and `booleanFalseStates` - When parsing `Boolean` type, defines 
+  the strings that will be parsed to true/false. Case insensitive.        
+
+* `textParsers` - List of objects of interface `TextParser`. Those will be invoked 
+in the insertion order when trying to parse a string into a typed field. 
+ 
+* `objectMapper` - The ObjectMapper that will be used by `JsonParser` when trying to 
+  parse strings to typed fields.   
 
 
 ##### Profiles support

@@ -40,7 +40,7 @@ class Kofiko {
             val newMap = (newValue as Map<*, *>).toMutableMap()
 
             val mergedMap = oldValue.toMutableMap()
-            var shallAppend = settings.appendToDicts
+            var shallAppend = settings.appendToMaps
             if (newMap.containsKey(settings.clearContainerPrefix)) {
                 shallAppend = false
                 newMap.remove(settings.clearContainerPrefix)
