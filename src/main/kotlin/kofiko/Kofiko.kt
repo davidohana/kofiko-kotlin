@@ -3,7 +3,6 @@
 package kofiko
 
 import java.lang.reflect.Field
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -147,12 +146,12 @@ class Kofiko {
             configSection.setProfile(profileName)
 
         val sectionName = getSectionName(configSection)
-        val sectionLookups = settings.nameLookupProvider.getSectionLookups(sectionName)
+        val sectionLookups = settings.nameLookup.getSectionLookups(sectionName)
         for ((i, field) in fields.withIndex()) {
             val optionName = getOptionName(field)
             var oldValue = oldValues[i]
 
-            val optionLookups = settings.nameLookupProvider.getOptionLookups(optionName)
+            val optionLookups = settings.nameLookup.getOptionLookups(optionName)
             val overrideResult = overrideField(
                 field, configSection, sectionLookups, optionLookups, settings.configProviders
             )

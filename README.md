@@ -172,7 +172,25 @@ in insertion order when looking for config option overrides.
     or `prefix` and `sectionToOptionSeparator` for `EnvConfigProvider` that will define
     how to resolve config options in env keys (`$prefix_$section_$option`).   
 
-
+* `nameLookup` - a class of interface `NameLookupProvider` which defines how 
+   to map between section/option name to a keys in configuration sources.
+   By default, Kofiko will try all casing styles: original, UPPERCASE, LOWERCASE, 
+   CamelCase, snake_case, kebab-case.  
+   For example class field `conStr`, Kofiko will attempt to resolve to: 
+   conStr, CONSTR,  constr, ConStr, CON_STR, con_str, CON-STR, con-str.
+   
+   `sectionLookupDeleteTerms` option defines list of strings to omit when 
+   trying to resolve from section name from class name. By default terms are
+   `"Config", "Settings", "Cfg", "Section"`. For example:
+   if the class name is `DatabaseConfig`, Kofiko will try also to look 
+   for a section named `Database`.
+        
+    ```kotlin
+    settings.nameLookup.allowKebabLower = false
+    settings.nameLookup.allowUpper = false
+    settings.nameLookup.sectionLookupDeleteTerms.add("Options")
+    ```
+  
 
 
 ##### Profiles support

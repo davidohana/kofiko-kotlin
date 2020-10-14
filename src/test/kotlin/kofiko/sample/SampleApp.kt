@@ -42,6 +42,11 @@ fun main(args: Array<String>) {
 
     // optional setting to print config options with non-default value
     settings.onOverride = PrintOverrideNotifier()
+
+    settings.nameLookup.allowKebabLower = false
+    settings.nameLookup.allowUpper = false
+    settings.nameLookup.sectionLookupDeleteTerms.add("Options")
+
     Kofiko.init(settings)
 
     // configuration is ready to use

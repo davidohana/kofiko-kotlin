@@ -10,7 +10,7 @@ open class DefaultNameLookupProvider : NameLookupProvider {
     var allowKebabUpper = true
     var allowUpperFirstLetter = true
 
-    var sectionLookupDeleteTokens = mutableListOf("Config", "Settings", "Cfg", "Section")
+    var sectionLookupDeleteTerms = mutableListOf("Config", "Settings", "Cfg", "Section")
 
     fun getCaseLookups(term: String): List<String> {
         val lookups = mutableSetOf<String>()
@@ -45,16 +45,16 @@ open class DefaultNameLookupProvider : NameLookupProvider {
         val lookups = mutableSetOf<String>()
         lookups.addAll(getCaseLookups(sectionName))
 
-        var sectionWithoutTokens = sectionName
-        for (token in sectionLookupDeleteTokens)
-            sectionWithoutTokens = sectionWithoutTokens.replace(token, "")
+        var sectionWithoutTerms = sectionName
+        for (term in sectionLookupDeleteTerms)
+            sectionWithoutTerms = sectionWithoutTerms.replace(term, "")
 
         // if we get empty section name after all deletions, revert to original name
-        if (sectionWithoutTokens.isEmpty())
-            sectionWithoutTokens = sectionName
+        if (sectionWithoutTerms.isEmpty())
+            sectionWithoutTerms = sectionName
 
-        if (sectionWithoutTokens != sectionName)
-            lookups.addAll(getCaseLookups(sectionWithoutTokens))
+        if (sectionWithoutTerms != sectionName)
+            lookups.addAll(getCaseLookups(sectionWithoutTerms))
 
         return lookups.toList()
     }

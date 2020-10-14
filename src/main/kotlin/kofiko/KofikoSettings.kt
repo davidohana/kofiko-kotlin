@@ -19,7 +19,7 @@ class KofikoSettings() {
         configProviders.addAll(providers)
     }
 
-    var nameLookupProvider = DefaultNameLookupProvider()
+    var nameLookup = DefaultNameLookupProvider()
     var configProviders = mutableListOf<KofikoConfigProvider>()
     var listSeparator = ","
     var keyToValSeparator = ":"
