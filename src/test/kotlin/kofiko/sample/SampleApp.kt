@@ -1,7 +1,5 @@
 package kofiko.sample
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.ObjectMapper
 import kofiko.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -52,4 +50,21 @@ fun main(args: Array<String>) {
     // configuration is ready to use
     Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
     println("Database user is " + DatabaseConfig.user)
+}
+
+class DatabaseConfig1 {
+    var host = "default"
+    var port = 8080
+
+    companion object {
+        val instance = DatabaseConfig1()
+
+        init {
+            Kofiko.configure(instance)
+        }
+    }
+}
+
+class DatabaseConnection(databaseConfig: DatabaseConfig1 = DatabaseConfig1.instance) {
+// ..
 }

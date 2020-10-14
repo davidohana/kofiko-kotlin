@@ -120,6 +120,29 @@ immediately, otherwise configuration options will be override when `Kofiko.init(
 For singletons (Kotlin `object`), `configure()` call can be embedded in the object `init` block, e.g
 `init { Kofiko.configure(this) }`.
 
+If you don't want to use singletons (for examples if you want more unit-test flexibility),
+your configuration consumer can accept the configuration section in its constructor. You can also
+combine both approaches by providing a default instance in the constructor, for example:
+
+```kotlin
+class DatabaseConfig {
+    var host = "default"
+    var port = 8080
+
+    companion object {
+        val instance = DatabaseConfig()
+
+        init {
+            Kofiko.configure(instance)
+        }
+    }
+}
+
+class DatabaseConnection(databaseConfig: DatabaseConfig = DatabaseConfig.instance) {
+// ..
+}
+``` 
+
 ##### Types support
 
 Configuration options (fields) can be of the following types:
