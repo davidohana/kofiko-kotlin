@@ -257,6 +257,38 @@ in the insertion order when trying to parse a string into a typed field.
   `PrintOverrideNotifier` or `LogOverrideNotifier` in order to print message to stdout/log 
   respectively.         
 
+##### Annotations
+
+* Add `@ConfigName` annotation to class or property in order to change 
+the name to lookup in config sources. 
+
+    ```kotlin
+    @ConfigName("MVAD")
+    class MultiVarDetectorAppConfig {
+        
+        @ConfigName("th")
+        var AnomalyScoreThreshold = 0.7 
+    }
+    ```
+    
+    This will accept `MVAD_th=0.8` as env var override.
+
+* Add `@Secret` annotation to a property in order to old/new values when printing
+  an override notification.  
+  
+    ```kotlin
+    object DatabaseConfig {
+    
+      @Secret
+      var password = "changeme"
+    }
+    ```
+
+   This will produce the following override notification:
+    
+   ```  
+   DatabaseConfig.password was changed from <[hidden]> to <[hidden]> by IniConfigProvider
+   ```
 
 ##### Profiles support
 
