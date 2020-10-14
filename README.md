@@ -133,9 +133,18 @@ Configuration options (fields) can be of the following types:
 * java.util.logging.Level  
 * Any type supported by [JsonDeserializer](https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/com/fasterxml/jackson/databind/JsonDeserializer.html),
 for example: `BigInteger`, `java.util.Date`, `UUID`, ...   
-Note that you can customize the expected data format by: `settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")`.
+Note that you can customize the expected date format by: `settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")`.
 * Composite objects can be provided in json format even in other config providers, for example in .ini file:
-    ```ini
+    ```
+    class Person {
+        var name: String = ""
+        var age: Int = 0
+    }
+
+    class Credits {
+        var author = Person()
+    }  
+    ```
     [CREDITS]
     author={ "name": "Dave", "age": 41 }
     ```   
