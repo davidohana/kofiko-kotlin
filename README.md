@@ -109,3 +109,58 @@ Database user is davidoh
 ```
 
 Kofiko can print/log the effective configuration overrides, omitting secret info like passwords.   
+
+### Installation
+
+Kofiko is available as a package, hosted at 
+the [jcenter](https://bintray.com/davidohana/kofiko/org.davidoh.kofiko.kofiko-core) repository.
+
+[ ![Download](https://api.bintray.com/packages/davidohana/kofiko/org.davidoh.kofiko.kofiko-core/images/download.svg) ](https://bintray.com/davidohana/kofiko/org.davidoh.kofiko.kofiko-core/_latestVersion)
+
+#### For Maven:
+
+```xml
+<!-- Add jcenter as a repository for dependencies --> 
+<project>
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.davidoh.kofiko</groupId>
+            <artifactId>kofiko-core</artifactId>
+            <version>$version</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+#### For Gradle:
+
+```groovy
+
+// Add jcenter as a repository for dependencies
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.davidoh.kofiko:kofiko-core:$version'
+}
+```
+
+### to-do:
+
+* Support additional file formats
+  
+### License: 
+
+Apache-2.0
+
+### Contributing 
+
+Our project welcomes external contributions. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
