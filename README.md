@@ -150,6 +150,31 @@ Note that you can customize the expected date format by: `settings.objectMapper.
     author={ "name": "Dave", "age": 41 }
     ```   
 
+##### Customization
+
+Kofiko uses many conventions which can be customized by changing 
+default values in `KofikoSettings` class.
+
+* `configProviders` - List of configuration data sources. Those are evaluated 
+in insertion order when looking for config option overrides.
+
+    ```kotlin
+    val settings = KofikoSettings()
+    val mapper = ObjectMapper().configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+    // add provider using explicit API 
+    settings.configProviders.add(JsonConfigProvider(ConfigSource("config.json")))
+    // or using extension method
+    settings.addJson("config.json") { objectMapper = mapper }
+    ```
+  
+    Many providers have specific customization options, 
+    e.g `objectMapper` for `JsonConfigProvider`
+    or `prefix` and `sectionToOptionSeparator` for `EnvConfigProvider` that will define
+    how to resolve config options in env keys (`$prefix_$section_$option`).   
+
+
+
+
 ##### Profiles support
 
 You can define more than one set of hard-coded defaults using the profiles feature:
@@ -183,8 +208,6 @@ Kofiko.configure(dbCfg)
 Kofiko.init(KofikoSettings(), profileName = "staging")
 print(dbCfg.url)
 ```
-
-##### Customization
 
 ##### Extending Kofiko
 

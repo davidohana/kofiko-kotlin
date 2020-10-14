@@ -1,5 +1,7 @@
 package kofiko.sample
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.ObjectMapper
 import kofiko.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -28,6 +30,12 @@ object LogConfig {
 }
 
 fun main(args: Array<String>) {
+
+    val settings = KofikoSettings()
+    val mapper = ObjectMapper().configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+    settings.configProviders.add(JsonConfigProvider(ConfigSource("config.json")))
+    settings.addJson("config.json") { objectMapper = mapper }
+
 
     val settings = KofikoSettings()
         .addCli(args) { this.overrideToken = "-o" }
