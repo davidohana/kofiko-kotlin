@@ -1,9 +1,8 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package kofiko
 
 import java.io.File
 import java.lang.reflect.Type
+import java.nio.file.Path
 import java.util.*
 
 
@@ -43,9 +42,19 @@ private fun parseINI(content: String): Map<String, Properties> {
 
 @Suppress("unused")
 class IniFileProviderFactory : FileProviderFactory {
-    override fun createConfigProvider(file: File): KofikoConfigProvider? {
-        if (file.extension.toLowerCase() == "ini")
-            return IniConfigProvider(ConfigSource(file))
-        return null
+    override fun createConfigProvider(filename: String): KofikoConfigProvider? {
+        var fn = filename
+        val ext = ".ini"
+        if (!fn.toLowerCase().endsWith(ext))
+            fn = "$fn$ext"
+        if (!File(fn).exists())
+            return null
+        return IniConfigProvider(ConfigSource(fn))
     }
+}
+
+
+fun KofikoSettings.addIniFile(filename: String) = this.apply {
+    val provider = IniConfigProvider(ConfigSource(filename))
+    this.configProviders.add(provider)
 }

@@ -9,7 +9,7 @@ import java.io.File
 import java.lang.reflect.Type
 
 
-class JsonConfigProvider(val jsonNode: JsonNode, val objectMapper: ObjectMapper = ObjectMapper()) :
+class JsonConfigProvider(val jsonNode: JsonNode, var objectMapper: ObjectMapper = ObjectMapper()) :
     KofikoConfigProvider {
 
     constructor(configSource: ConfigSource, objectMapper: ObjectMapper = ObjectMapper()) : this(
@@ -30,10 +30,20 @@ class JsonConfigProvider(val jsonNode: JsonNode, val objectMapper: ObjectMapper 
 
 @Suppress("unused")
 class JsonFileProviderFactory : FileProviderFactory {
-    override fun createConfigProvider(file: File): KofikoConfigProvider? {
-        if (file.extension.toLowerCase() == "json") {
-            return JsonConfigProvider(ConfigSource(file))
-        }
-        return null
+    override fun createConfigProvider(filename: String): KofikoConfigProvider? {
+        var fn = filename
+        val ext = ".json"
+        if (!fn.toLowerCase().endsWith(ext))
+            fn = "$fn$ext"
+        if (!File(fn).exists())
+            return null
+        return JsonConfigProvider(ConfigSource(fn))
     }
+}
+
+
+fun KofikoSettings.addJson(filename: String, init: JsonConfigProvider.() -> Unit = {}) = this.apply {
+    val provider = JsonConfigProvider(ConfigSource(filename))
+    provider.init()
+    this.configProviders.add(provider)
 }

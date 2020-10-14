@@ -10,7 +10,7 @@ fun interface KofikoConfigProvider {
 }
 
 interface FileProviderFactory {
-    fun createConfigProvider(file: File): KofikoConfigProvider?
+    fun createConfigProvider(filename: String): KofikoConfigProvider?
 }
 
 interface TextParser {

@@ -5,9 +5,9 @@ package kofiko
 import java.lang.reflect.Type
 
 open class MapConfigProvider(
-    val content: Map<String, String>,
-    val keyPrefix: String = "",
-    val sectionToOptionSeparator: String = "_",
+    var content: Map<String, String>,
+    var keyPrefix: String = "",
+    var sectionToOptionSeparator: String = "_",
 ) : KofikoConfigProvider {
 
     fun getKey(section: String, option: String): String {
@@ -29,3 +29,10 @@ open class MapConfigProvider(
     }
 
 }
+
+fun KofikoSettings.addMap(content: Map<String, String>, init: MapConfigProvider.() -> Unit = {}) = this.apply {
+    val provider = MapConfigProvider(content)
+    provider.init()
+    this.configProviders.add(provider)
+}
+

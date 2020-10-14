@@ -28,13 +28,13 @@ object LogConfig {
 }
 
 fun main(args: Array<String>) {
-    JsonConfigProvider(ConfigSource("test.json"))
-    val settings = KofikoSettings(
-        CliConfigProvider(args),
-        EnvConfigProvider(),
-//        ConfigProviderIni("src/test/kotlin/kofiko/sample/config.ini"),
-//        JsonConfigProvider.fromFile("src/test/kotlin/kofiko/sample/config.json")
-    )
+
+    val settings = KofikoSettings()
+        .addCli(args) { this.overrideToken = "-o" }
+        .addEnv()
+        .addSystemProperties()
+        .addFiles("config.json", "config.ini", "config.env", "config.properties")
+
     settings.onOverride = PrintOverrideNotifier()
     Kofiko.init(settings)
 
@@ -46,3 +46,4 @@ fun main(args: Array<String>) {
 fun connect(endpoint: List<String>, user: String, password: String) {
     // write your connection code here
 }
+

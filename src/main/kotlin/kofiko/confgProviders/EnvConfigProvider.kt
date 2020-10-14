@@ -7,4 +7,13 @@ class EnvConfigProvider(
     sectionToOptionSeparator: String = "_",
     env: Map<String, String> = System.getenv()!!
 ) : MapConfigProvider(
-    env, prefix, sectionToOptionSeparator)
+    env, prefix, sectionToOptionSeparator
+)
+
+
+fun KofikoSettings.addEnv(init: EnvConfigProvider.() -> Unit = {}) = this.apply {
+    val provider = EnvConfigProvider()
+    provider.init()
+    this.configProviders.add(provider)
+}
+

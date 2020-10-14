@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class JsonFolderConfigProvider(
     val folder: Path,
-    val objectMapper: ObjectMapper = ObjectMapper()
+    var objectMapper: ObjectMapper = ObjectMapper()
 ) : KofikoConfigProvider {
 
     private val sectionNodeCache = ConcurrentHashMap<String, JsonNode>()
@@ -55,3 +55,11 @@ class JsonFolderConfigProvider(
         return objectMapper.readerFor(javaType).readValue(optionNode)
     }
 }
+
+fun KofikoSettings.addJsonFolder(folderPath: String, init: JsonFolderConfigProvider.() -> Unit = {}) = this.apply {
+    val provider = JsonFolderConfigProvider(folderPath)
+    provider.init()
+    this.configProviders.add(provider)
+}
+
+

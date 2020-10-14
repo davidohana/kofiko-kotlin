@@ -7,11 +7,11 @@ import java.util.*
 
 class EnvFileConfigProvider(
     configSource: ConfigSource,
-    prefix: String = "",
+    keyPrefix: String = "",
     sectionToOptionSeparator: String = "_"
 ) : MapConfigProvider(
     configSource.content.toProperties().toMap(),
-    prefix,
+    keyPrefix,
     sectionToOptionSeparator
 )
 
@@ -37,11 +37,21 @@ private fun Properties.toMap(): Map<String, String> {
 
 @Suppress("unused")
 class EnvFileProviderFactory : FileProviderFactory {
-    override fun createConfigProvider(file: File): KofikoConfigProvider? {
-        if (file.extension.toLowerCase() == "env")
-            return EnvFileConfigProvider(ConfigSource(file))
-        return null
+    override fun createConfigProvider(filename: String): KofikoConfigProvider? {
+        var fn = filename
+        val ext = ".env"
+        if (!fn.toLowerCase().endsWith(ext))
+            fn = "$fn$ext"
+        if (!File(fn).exists())
+            return null
+        return EnvFileConfigProvider(ConfigSource(fn))
     }
 }
 
+
+fun KofikoSettings.addEnvFile(filename: String, init: EnvFileConfigProvider.() -> Unit = {}) = this.apply {
+    val provider = EnvFileConfigProvider(ConfigSource(filename))
+    provider.init()
+    this.configProviders.add(provider)
+}
 

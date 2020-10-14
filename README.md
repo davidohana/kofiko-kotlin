@@ -13,7 +13,7 @@ Note: This is work-in-progress. Official first version not released yet.
 * Layered design allows overriding the configuration from 
 environment variables, command-line arguments, Java system properties (`-D`) 
 in any precedence order you like.     
-
+* Only 3rd-party dependency required is [`com.fasterxml.jackson.core`](https://github.com/FasterXML/jackson). 
 
 #### Define application configuration as Kotlin classes/objects:
 
@@ -46,9 +46,9 @@ Configuration options should be declared as `var` properties (read/write) with b
 By using Kotlin `object`, you may easily access configuration as a singleton without injection.    
 However, instances of configuration classes may be configured as well.
 
-#### Override default values at run time: 
+#### Override default values at run-time: 
 
-For example, from JSON:
+For example, from a JSON file:
 
 ``` json
 {
@@ -62,7 +62,7 @@ For example, from JSON:
 }
 ```
 
-or using env. vars:
+or using *env. vars*:
 
 ```shell script
 DATABASE_user=davidoh \
@@ -76,7 +76,7 @@ java -cp my_app.jar
 Kofiko uses out-of-the-box (configurable) conventions to search for matching configuration entries, 
 looking for lowercase, uppercase, camel-case, snake-case, kebab-case matches.
 
-##### Initialize Kofiko with the desired configuration sources
+#### Initialize Kofiko with the desired configuration sources:
 
 ```kotlin
 val settings = KofikoSettings(

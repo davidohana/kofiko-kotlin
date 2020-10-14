@@ -3,31 +3,36 @@
 package kofiko
 
 import java.io.File
+import java.nio.file.Path
 import java.util.*
 
 
-fun createConfigProvider(file: File): KofikoConfigProvider {
+fun createConfigProvider(filename: String): KofikoConfigProvider {
     val serviceLoader = ServiceLoader.load(FileProviderFactory::class.java)
     val factories = serviceLoader.toList()
 
     return factories
         .asSequence()
-        .mapNotNull { it.createConfigProvider(file) }
+        .mapNotNull { it.createConfigProvider(filename) }
         .firstOrNull()
-        ?: throw NotImplementedError("File $file cannot be handled by any provider")
+        ?: throw NotImplementedError("File $filename cannot be handled by any provider")
 }
 
 
-fun KofikoSettings.addFiles(
-    vararg files: File, mustExist: Boolean = false
-): KofikoSettings {
-    for (file in files) {
-        if (!mustExist && !file.exists())
-            continue
-
-        val provider = createConfigProvider(file)
+fun KofikoSettings.addFiles(vararg filenames: String) = apply {
+    for (filename in filenames) {
+        val provider = createConfigProvider(filename)
         this.configProviders.add(provider)
     }
+}
 
+fun KofikoSettings.addFiles(vararg files: File) = apply {
+    val filenames = files.map { it.toString() }.toTypedArray()
+    addFiles(*filenames)
+}
+
+fun KofikoSettings.addFiles(vararg paths: Path) = apply {
+    val filenames = paths.map { it.toString() }.toTypedArray()
+    addFiles(*filenames)
     return this
 }

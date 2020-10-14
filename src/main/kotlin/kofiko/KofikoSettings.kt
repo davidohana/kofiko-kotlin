@@ -40,6 +40,8 @@ class KofikoSettings() {
         ConciseSetParser(this),
         JsonParser(this),
     )
+
+    fun add(provider: KofikoConfigProvider) = apply { configProviders.add(provider) }
 }
 
 
