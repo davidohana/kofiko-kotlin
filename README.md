@@ -8,12 +8,17 @@ Note: This is work-in-progress. Official first version not released yet.
 
 ![](docs/kofiko-kotlin.png)
 
-Lightweight, simple and minimal boilerplate configuration library for Kotlin.
+* Lightweight, simple and minimal boilerplate configuration library for Kotlin.  
+* Supported formats: `.json`, `.ini`, `.properties`, `.env`
+* Layered design allows overriding the configuration from 
+environment variables, command-line arguments, Java system properties (`-D`) 
+in any precedence order you like.     
+
 
 ##### Define application configuration as Kotlin classes/objects:
 
 ``` kotlin
-object DatabaseConfig {
+class DatabaseConfig {
     var user = "default_user"
 
     @ConfigOption(secret = true)
@@ -22,10 +27,6 @@ object DatabaseConfig {
     var endpoints = listOf("http://localhost:1234")
     var unsafeSSL = false
     var dbSizeLimits = mapOf("alerts" to 50, "logs" to 200)
-
-    init {
-        Kofiko.configure(this)
-    }
 }
 
 object LogConfig {
@@ -37,14 +38,13 @@ object LogConfig {
 }
 ```
 
-Each config section is represented by a class/object so that configuration consumers may 
+Each config section is represented by a `class` / `object` so that configuration consumers may 
 receive only the configuration of interest.
 
 Configuration options should be declared as `var` properties (read/write) with baked-in defaults.
    
-Kofiko supports configuring static Kotlin objects for easier access by configuration consumers. 
-Instances of configuration classes may be configured as well.
-
+By using Kotlin `object`, you may easily access configuration as a singleton without injection.    
+However, instances of configuration classes may be configured as well.
 
 ##### Override default values from cascading sources: 
 
