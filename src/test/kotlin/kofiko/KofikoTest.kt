@@ -736,23 +736,23 @@ class KofikoTest {
         cfg.text.shouldBeEqualTo("aaa")
     }
 
-//    @Test
-//    fun testParseQuotedString() {
-//        class Test {
-//            var str1 = "david"
-//            var str2 = "david"
-//            var str3 = "david"
-//        }
-//
-//        val map = mapOf("test_str1" to "dave", "test_str2" to """ x="y" """, "test_str3" to "'dummy'")
-//
-//        val settings = KofikoSettings(MapConfigProvider(map, trimWhitespace = false, trimQuotes = false))
-//        settings.onOverride = PrintOverrideNotifier()
-//        val kofiko = Kofiko(settings)
-//        val cfg = Test()
-//        kofiko.configure(cfg)
-//        cfg.str1.shouldBeEqualTo("dave")
-//        cfg.str2.shouldBeEqualTo(""" x="y" """)
-//        cfg.str3.shouldBeEqualTo("'dummy'")
-//    }
+    @Test
+    fun testParseQuotedString() {
+        class Test {
+            var str1 = "david"
+            var str2 = "david"
+            var str3 = "david"
+        }
+
+        val map = mapOf("test_str1" to "dave", "test_str2" to """ x="y" """, "test_str3" to "'dummy'")
+
+        val settings = KofikoSettings(MapConfigProvider(map))
+        settings.onOverride = PrintOverrideNotifier()
+        val kofiko = Kofiko(settings)
+        val cfg = Test()
+        kofiko.configure(cfg)
+        cfg.str1.shouldBeEqualTo("dave")
+        cfg.str2.shouldBeEqualTo(""" x="y" """)
+        cfg.str3.shouldBeEqualTo("'dummy'")
+    }
 }

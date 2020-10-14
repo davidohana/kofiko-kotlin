@@ -4,6 +4,7 @@ package kofiko
 
 import java.lang.reflect.Field
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.CopyOnWriteArraySet
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -15,7 +16,7 @@ class Kofiko {
     lateinit var profileName: String
         private set
 
-    private val registeredConfigSections = CopyOnWriteArrayList<Any>()
+    private val registeredConfigSections = CopyOnWriteArraySet<Any>()
 
     private val _sectionNameToOverrides = mutableMapOf<String, List<FieldOverride>>()
 

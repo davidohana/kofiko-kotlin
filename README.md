@@ -10,8 +10,8 @@ Note: This is work-in-progress. Official first version not released yet.
 
 * Lightweight, simple and minimal boilerplate *configuration library* for Kotlin.  
 * Supported formats: `.json`, `.ini`, `.properties`, `.env`
-* Layered design allows overriding the configuration from 
-environment variables, command-line arguments, Java system properties (`-D`) 
+* Layered (cascading) and extensible design allows overriding the configuration from 
+environment variables, command-line arguments, Java system properties (`-D`), Java Maps
 in any precedence order you like.     
 * Only 3rd-party dependency required is [`com.fasterxml.jackson.core`](https://github.com/FasterXML/jackson). 
 
@@ -110,6 +110,42 @@ Database user is davidoh
 
 Kofiko can print/log the effective configuration overrides, omitting secret info like passwords.   
 
+### In-Depth
+
+##### Registering configuration objects
+
+`Kofiko.configure(configObj)` shall be called in order to register `configObj`. 
+If Kofiko is already initialized, this call will override configuration options in the object 
+immediately, otherwise configuration options will be override when `Kofiko.init()` is called.  
+For singletons (Kotlin `object`), `configure()` call can be embedded in the object `init` block, e.g
+`init { Kofiko.configure(this) }`.
+
+##### Types support
+
+Configuration options (fields) can be of the following types:
+
+* String 
+* Numbers (Int, Long, Double, Float, Byte, Short)
+* Boolean (parses any casing of `true/false; 1/0; on/off; yes/no; t/f, y/n`)
+* List (parses concise format `item1,item2,item3`)
+* Map (parses concise format `key1:val1,key2:val2`)
+* Set (parses concise format `item1,item2,item3`)
+* java.util.logging.Level  
+* Any type supported by [JsonDeserializer](https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/com/fasterxml/jackson/databind/JsonDeserializer.html),
+for example: `BigInteger`, `java.util.Date`, `UUID`, ...   
+Note that you can customize the expected data format by: `settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")`.
+* Composite objects can be provided in json format even in other config providers, for example in .ini file:
+    ```ini
+    [CREDITS]
+    author={ "name": "Dave", "age": 41 }
+    ```   
+
+##### Profiles support
+
+##### Customization
+
+##### Extending Kofiko
+
 ### Installation
 
 Kofiko is available as a package, hosted at 
@@ -163,4 +199,5 @@ Apache-2.0
 
 ### Contributing 
 
-This project welcomes external contributions. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
+This project welcomes external contributions. 
+Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
