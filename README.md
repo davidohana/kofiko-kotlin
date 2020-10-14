@@ -266,6 +266,21 @@ print(dbCfg.url)
 
 ##### Extending Kofiko
 
+* You can implement `KofikoConfigProvider` to supply a new type of config source, 
+  for example `YamlConfigProvider`. If config provider support files, 
+  you can also provide `FileProviderFactory` implementation to create 
+  your provider from a filename (don't forget to add it to 
+  `resources/META-INF/services/kofiko.FileProviderFactory` in your package so 
+  that ServiceLocator will be able to locate this factory.)  
+
+* You can implement `TextParser` to be able to parse a new data type from string.
+  The parser instance is enabled by adding it to `KofikoSettings.textParsers`. 
+
+* You can implement `NameLookupProvider` to provide custom translation from class & 
+  field names to keys to look for in config sources. 
+  The provider is enabled by setting `KofikoSettings.nameLookup` to this instance.  
+
+
 ### Installation
 
 Kofiko is available as a package, hosted at 
