@@ -65,7 +65,12 @@ For example, from JSON:
 or using env. vars:
 
 ```shell script
-DATABASE_user=davidoh DATABASE_password=reallysecret! DATABASE_endpoints=prod1,prod2 LOG_level=WARNING DATABASE_DB_SIZE_LIMITS=logs:5,events:120 java -cp my_app.jar
+DATABASE_user=davidoh \
+DATABASE_password=reallysecret! \
+DATABASE_endpoints=prod1,prod2 \
+LOG_level=WARNING \
+DATABASE_DB_SIZE_LIMITS=logs:5,events:120 \
+java -cp my_app.jar
 ```
 
 Kofiko uses out-of-the-box (configurable) conventions to search for matching configuration entries, 
