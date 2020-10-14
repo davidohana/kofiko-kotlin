@@ -32,12 +32,6 @@ object LogConfig {
 fun main(args: Array<String>) {
 
     val settings = KofikoSettings()
-    val mapper = ObjectMapper().configure(JsonParser.Feature.ALLOW_COMMENTS, true)
-    settings.configProviders.add(JsonConfigProvider(ConfigSource("config.json")))
-    settings.addJson("config.json") { objectMapper = mapper }
-
-
-    val settings = KofikoSettings()
         .addCli(args) { this.overrideToken = "-o" }
         .addEnv()
         .addSystemProperties()

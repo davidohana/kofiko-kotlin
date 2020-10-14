@@ -163,7 +163,7 @@ in insertion order when looking for config option overrides.
     val mapper = ObjectMapper().configure(JsonParser.Feature.ALLOW_COMMENTS, true)
     // add provider using explicit API 
     settings.configProviders.add(JsonConfigProvider(ConfigSource("config.json")))
-    // or using extension method
+    // or using extension method with optional init block 
     settings.addJson("config.json") { objectMapper = mapper }
     ```
   
