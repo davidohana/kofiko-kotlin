@@ -172,10 +172,10 @@ in insertion order when looking for config option overrides.
     or `prefix` and `sectionToOptionSeparator` for `EnvConfigProvider` that will define
     how to resolve config options in env keys (`$prefix_$section_$option`).
     
-    You can also use the `addFiles(filename1, filename2)` extension function which adds 
-    an appropriate ConfigParser according to extension of the specified filename. It 
+    You can also use the `addFiles(vararg filenames: String)` extension function which adds 
+    an appropriate ConfigParser according to extension of the specified filenames. It 
     is also possible to specify a filename without extension, which will look for 
-    a filename with any supported extension.  
+    an existing filename with any supported extension.  
     For example: `settings.addFiles("sample_config")` will look for    
     sample_config.json, sample_config.ini, sample_config.env, sample_config.properties.
 

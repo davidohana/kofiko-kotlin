@@ -42,7 +42,6 @@ fun main(args: Array<String>) {
 
     // optional setting to print config options with non-default value
     settings.onOverride = PrintOverrideNotifier()
-    settings.addFiles("sample_config")
 
     settings.nameLookup.allowKebabLower = false
     settings.nameLookup.allowUpper = false
