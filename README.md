@@ -309,7 +309,7 @@ print(dbCfg.url)
   The provider is enabled by setting `KofikoSettings.nameLookup` to this instance.
   
 * You can implement `OverrideNotifier` to provide a custom action when a config 
-  option (field) is changed from its default value.    
+  option (field) is changed from its default value (also set `KofikoSettings.onOverride`).
 
 
 ### Installation
