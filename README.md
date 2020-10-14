@@ -8,14 +8,14 @@ Note: This is work-in-progress. Official first version not released yet.
 
 ![](docs/kofiko-kotlin.png)
 
-* Lightweight, simple and minimal boilerplate configuration library for Kotlin.  
+* Lightweight, simple and minimal boilerplate *configuration library* for Kotlin.  
 * Supported formats: `.json`, `.ini`, `.properties`, `.env`
 * Layered design allows overriding the configuration from 
 environment variables, command-line arguments, Java system properties (`-D`) 
 in any precedence order you like.     
 
 
-##### Define application configuration as Kotlin classes/objects:
+#### Define application configuration as Kotlin classes/objects:
 
 ``` kotlin
 class DatabaseConfig {
@@ -46,40 +46,30 @@ Configuration options should be declared as `var` properties (read/write) with b
 By using Kotlin `object`, you may easily access configuration as a singleton without injection.    
 However, instances of configuration classes may be configured as well.
 
-##### Override default values from cascading sources: 
+#### Override default values at run time: 
 
-* `.ini` files
-* `.json` files
-* `.properties` files
-* `.env` files
-* Environment variables
-* Command-line arguments
-* System Properties
-
-For example:
-
-```shell script
-DATABASE_user=davidoh 
-DATABASE_password=reallysecret! 
-DATABASE_endpoints=prod1,prod2
-LOG_level=WARNING
-```
-
-or:
+For example, from JSON:
 
 ``` json
 {
   "database": {
+    "user": "davidoh",
     "db_size_limits": {
       "logs": 1,
-      "alerts": 2
+      "events": 120
     }
   }
 }
 ```
 
-Kofiko uses out-of-the-box configurable conventions to search for matching configuration entries, 
-looking for lowercase, uppercase, camel-case, snake-case, kebab-case matches.   
+or using env. vars:
+
+```shell script
+DATABASE_user=davidoh DATABASE_password=reallysecret! DATABASE_endpoints=prod1,prod2 LOG_level=WARNING DATABASE_DB_SIZE_LIMITS=logs:5,events:120 java -cp my_app.jar
+```
+
+Kofiko uses out-of-the-box (configurable) conventions to search for matching configuration entries, 
+looking for lowercase, uppercase, camel-case, snake-case, kebab-case matches.
 
 ##### Initialize Kofiko with the desired configuration sources
 
