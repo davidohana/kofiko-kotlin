@@ -135,7 +135,7 @@ Configuration options (fields) can be of the following types:
 for example: `BigInteger`, `java.util.Date`, `UUID`, ...   
 Note that you can customize the expected date format by: `settings.objectMapper.dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")`.
 * Composite objects can be provided in json format even in other config providers, for example in .ini file:
-    ```
+    ```kotlin
     class Person {
         var name: String = ""
         var age: Int = 0
@@ -144,6 +144,7 @@ Note that you can customize the expected date format by: `settings.objectMapper.
     class Credits {
         var author = Person()
     }  
+    ```
     ```
     [CREDITS]
     author={ "name": "Dave", "age": 41 }
