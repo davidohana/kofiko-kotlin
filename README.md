@@ -33,7 +33,7 @@ object LogConfig {
     var level = Level.INFO
 
     init {
-        Kofiko.configure(this)
+        Kofiko.add(this)
     }
 }
 ```
@@ -114,11 +114,11 @@ Kofiko can print/log the effective configuration overrides, omitting secret info
 
 ##### Registering configuration objects
 
-`Kofiko.configure(configObj)` shall be called in order to register `configObj`. 
+`Kofiko.add(configObj)` shall be called in order to register `configObj`. 
 If Kofiko is already initialized, this call will override configuration options in the object 
 immediately, otherwise configuration options will be override when `Kofiko.init()` is called.  
-For singletons (Kotlin `object`), `configure()` call can be embedded in the object `init` block, e.g
-`init { Kofiko.configure(this) }`.
+For singletons (Kotlin `object`), `add()` call can be embedded in the object `init` block, e.g
+`init { Kofiko.add(this) }`.
 
 If you don't want to use singletons (for examples if you want more unit-test flexibility),
 your configuration consumer can accept the configuration section in its constructor. You can also
@@ -133,7 +133,7 @@ class DatabaseConfig {
         val instance = DatabaseConfig()
 
         init {
-            Kofiko.configure(instance)
+            Kofiko.add(instance)
         }
     }
 }
@@ -183,7 +183,7 @@ in insertion order when looking for config option overrides.
 
     ```kotlin
     val settings = KofikoSettings()
-    val mapper = ObjectMapper().configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+    val mapper = ObjectMapper().add(JsonParser.Feature.ALLOW_COMMENTS, true)
     // add provider using explicit API 
     settings.configProviders.add(JsonConfigProvider(ConfigSource("config.json")))
     // or using extension method with optional init block 
@@ -319,7 +319,7 @@ class DatabaseConfig: ProfileSupport  {
 }
 
 val dbCfg = DatabaseConfig()
-Kofiko.configure(dbCfg)
+Kofiko.add(dbCfg)
 Kofiko.init(KofikoSettings(), profileName = "staging")
 print(dbCfg.url)
 ```

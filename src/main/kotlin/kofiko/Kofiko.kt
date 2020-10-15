@@ -8,10 +8,27 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 
+/**
+ * Code-First Configuration Manager for Kotlin.
+ * Overwrites default property values in configuration classes from a list of specified configuration providers.
+ * Can be used as a singleton [Kofiko.instance] or by creating an instance of this class.
+ * Configuration objects (sections) can be registered using [Kofiko.add] before or after [Kofiko.init] call.
+ * [Kofiko.init] shall be called with a [KofikoSettings] which contains at least one [KofikoConfigProvider].
+ * During the init call, all configuration classes that where already registered with [Kofiko.add] are
+ * processed - default values are overridden using config providers in the insertion order.
+ * Configuration objects that are added after init are configured immediately.
+ */
 class Kofiko {
+    /**
+     * Configuration settings that are being used to configure objects.
+     */
     lateinit var settings: KofikoSettings
         private set
 
+    /**
+     * Active profile (optional). Used for selecting a set of hard coded default configuration for configuration
+     * classes that implement [ProfileSupport].
+     */
     lateinit var profileName: String
         private set
 
@@ -19,11 +36,23 @@ class Kofiko {
 
     private val _sectionNameToOverrides = mutableMapOf<String, List<FieldOverride>>()
 
+    /**
+     * Contains all fields that were changed from default values so far, grouped by section name.
+     */
     val sectionNameToOverrides: Map<String, List<FieldOverride>>
         get() = _sectionNameToOverrides
 
     private constructor()
 
+    /**
+     * Create a new instance of the configuration manager.
+     *
+     * @param settings Contains customization options. Typically iy should contain at least one [KofikoConfigProvider].
+     *
+     * @param profileName Optional name of a profile that will be used for selecting a set of
+     * hard-coded default configuration for configuration classes that implements [ProfileSupport]. Default profile
+     * is an empty string.
+     */
     constructor(settings: KofikoSettings, profileName: String = "") {
         this.settings = settings
         this.profileName = profileName
@@ -182,36 +211,78 @@ class Kofiko {
         return sectionOverrides
     }
 
-    fun configure(configSection: Any): List<FieldOverride> {
+    /**
+     * Registers and configures a new configuration object instance as a section.
+     *
+     * Configuration object can be any object. Only public read-write (var) properties and fields will be configured.
+     *
+     * @return a list of fields that were changed from default value.
+     */
+    fun add(configSection: Any): List<FieldOverride> {
         registeredConfigSections.add(configSection)
         if (this::settings.isInitialized)
             return overrideConfigSection(configSection)
         return emptyList()
     }
 
+    /**
+     * Returns a list of all registered configuration objects.
+     */
     fun getRegisteredSections(): List<Any> {
         return registeredConfigSections.toList()
     }
 
     companion object {
+        /**
+         * Default instance of the configuration manager.
+         *
+         * You should typically use this instance unless you need multiple configuration managers.
+         * Note that [init] and [add] calls works on this [instance].
+         */
         val instance = Kofiko()
 
+        /**
+         * Initializes the default configuration manager and configures all registered configuration objects.
+         *
+         * @param settings Contains customization options. Typically iy should contain at least one [KofikoConfigProvider].
+         * @param profileName Optional name of a profile that will be used for selecting a set of
+         * hard-coded default configuration for configuration classes that implements [ProfileSupport]. Default profile
+         * is an empty string.
+         */
         fun init(settings: KofikoSettings, profileName: String = "") {
             instance.initSettings(settings, profileName)
         }
 
-        fun configure(configSection: Any) {
-            instance.configure(configSection)
+
+        /**
+         * Registers a configuration object with the default configuration manager.
+         * Configuration object can be any object. Only public read-write (var) properties and fields will be configured.
+         *
+         * If configuration manager was already initialized with [init], the section will be configured immediately.
+         * Otherwise it will be configured once init is called.
+         *
+         * @return a list of fields that were changed from default value. Empty list in case [init] was not called yet.
+         */
+        fun add(configSection: Any): List<FieldOverride> {
+            return instance.add(configSection)
         }
     }
 }
 
+/**
+ * An [OverrideNotifier] that print field configuration changes to the standard output stream.
+ */
 class PrintOverrideNotifier : OverrideNotifier {
     override fun accept(override: FieldOverride) {
         println(override.toString())
     }
 }
 
+/**
+ * An [OverrideNotifier] that print field configuration changes to log using [java.util.logging.Logger]
+ *
+ * @param logLevel The desired logging level of override notifications. Default is [java.util.logging.Level.INFO]
+ */
 class LogOverrideNotifier(val logLevel: Level = Level.INFO) : OverrideNotifier {
     private val logger = Logger.getLogger(Kofiko::class.java.name)
     override fun accept(override: FieldOverride) {

@@ -15,7 +15,7 @@ object DatabaseConfig {
     var dbSizeLimits = mapOf("alerts" to 50, "logs" to 200)
 
     init {
-        Kofiko.configure(this)
+        Kofiko.add(this)
     }
 }
 
@@ -23,7 +23,7 @@ object LogConfig {
     var level = Level.INFO
 
     init {
-        Kofiko.configure(this)
+        Kofiko.add(this)
     }
 }
 

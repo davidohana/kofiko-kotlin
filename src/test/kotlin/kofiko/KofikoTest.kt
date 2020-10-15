@@ -70,7 +70,7 @@ class KofikoSampleConfig {
         val instance = KofikoSampleConfig()
 
         init {
-            Kofiko.configure(instance)
+            Kofiko.add(instance)
         }
     }
 }
@@ -192,7 +192,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -205,7 +205,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -243,7 +243,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -280,7 +280,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -319,7 +319,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
 
     }
@@ -379,7 +379,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings, "staging")
         val cfg = ProfiledConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
 
         cfg.port.shouldBeEqualTo(8080)
         cfg.envName.shouldBeEqualTo("staging")
@@ -411,7 +411,7 @@ class KofikoTest {
     @Test
     fun testEmptySectionName() {
         val kofiko = Kofiko(KofikoSettings())
-        kofiko.configure(Config())
+        kofiko.add(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
     }
 
@@ -432,12 +432,12 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg1 = ParentOfNested.Config()
-        kofiko.configure(cfg1)
+        kofiko.add(cfg1)
         kofiko.sectionNameToOverrides.keys.shouldContain("ParentOfNested.Config")
         cfg1.dummy.shouldBeEqualTo(3)
 
         val cfg2 = NestedInFun()
-        kofiko.configure(cfg2)
+        kofiko.add(cfg2)
         kofiko.sectionNameToOverrides.keys.shouldContain("NestedInFun")
         cfg2.test.shouldBeEqualTo(2)
     }
@@ -459,7 +459,7 @@ class KofikoTest {
         val kofiko = Kofiko(settings)
 
         val cfg = AnnotatedSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         kofiko.sectionNameToOverrides.keys.shouldContain("anno")
         cfg.test.shouldBeEqualTo(2)
     }
@@ -486,7 +486,7 @@ class KofikoTest {
 
         settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
-        kofiko.configure(Config())
+        kofiko.add(Config())
         kofiko.sectionNameToOverrides.keys.shouldContain("Config")
         kofiko.sectionNameToOverrides.size.shouldBeEqualTo(1)
         val overrides = kofiko.sectionNameToOverrides.values.first()
@@ -509,7 +509,7 @@ class KofikoTest {
 
         settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
-        kofiko.configure(MyCar)
+        kofiko.add(MyCar)
         MyCar.color.shouldBeEqualTo("blue")
     }
 
@@ -529,7 +529,7 @@ class KofikoTest {
         settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
         val cfg = TheData()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.dummy.shouldBeEqualTo(3)
     }
 
@@ -569,7 +569,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -606,7 +606,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = KofikoSampleConfig()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         assertExpectedConfig(cfg)
     }
 
@@ -623,7 +623,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         val expDate = GregorianCalendar(2020, Calendar.SEPTEMBER, 18, 17, 24, 44).time
         cfg.myDate.shouldBeEqualTo(expDate)
     }
@@ -645,7 +645,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.me.name.shouldBeEqualTo("Dave")
         cfg.me.age.shouldBeEqualTo(41)
     }
@@ -666,7 +666,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = Pizza()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.extras.shouldBeEqualTo("olives")
         cfg.calories.shouldBeEqualTo(300)
 
@@ -688,7 +688,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.MySet.shouldBeEqualTo(setOf("x", "b", "a"))
         cfg.MySet2.shouldBeEqualTo(setOf("x", "b", "a", "y", "z"))
     }
@@ -705,7 +705,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.num.shouldBeEqualTo(BigInteger.TWO)
     }
 
@@ -731,7 +731,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = TestSection()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.num.shouldBeEqualTo(2)
         cfg.text.shouldBeEqualTo("aaa")
     }
@@ -750,7 +750,7 @@ class KofikoTest {
         settings.onOverride = PrintOverrideNotifier()
         val kofiko = Kofiko(settings)
         val cfg = Test()
-        kofiko.configure(cfg)
+        kofiko.add(cfg)
         cfg.str1.shouldBeEqualTo("dave")
         cfg.str2.shouldBeEqualTo(""" x="y" """)
         cfg.str3.shouldBeEqualTo("'dummy'")
