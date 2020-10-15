@@ -32,7 +32,7 @@ class EnvConfigProvider(
 
 
 /**
- * Add System environment variables as config provider.
+ * Add System environment variables as a config provider.
  * Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addEnv(init: EnvConfigProvider.() -> Unit = {}) = this.apply {

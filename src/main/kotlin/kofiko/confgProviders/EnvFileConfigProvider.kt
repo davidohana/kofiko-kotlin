@@ -74,7 +74,7 @@ class EnvFileProviderFactory : FileProviderFactory {
 
 
 /**
- * Add a `.env` file as config provider.
+ * Add a `.env` file as a config provider.
  * Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addEnvFile(filename: String, init: EnvFileConfigProvider.() -> Unit = {}) = this.apply {

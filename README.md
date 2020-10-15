@@ -11,7 +11,7 @@ Note: This is work-in-progress. Official first version not released yet.
 * Lightweight, simple and minimal boilerplate *configuration library* for Kotlin.  
 * Supported formats: `.json`, `.ini`, `.properties`, `.env`
 * Layered (cascading) and extensible design allows overriding the configuration from 
-environment variables, command-line arguments, Java system properties (`-D`), Java Maps
+environment variables, command-line arguments, JVM system properties (`-D`), Java Maps
 in any precedence order you like.     
 * Only 3rd-party dependency required is [`com.fasterxml.jackson.core`](https://github.com/FasterXML/jackson). 
 

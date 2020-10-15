@@ -60,7 +60,7 @@ class IniFileProviderFactory : FileProviderFactory {
 
 
 /**
- * Add a `.ini` file as config provider.
+ * Add a `.ini` file as a config provider.
  */
 fun KofikoSettings.addIniFile(filename: String) = this.apply {
     val provider = IniConfigProvider(ConfigSource(filename))

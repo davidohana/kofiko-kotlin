@@ -53,7 +53,7 @@ class CliConfigProvider(
 }
 
 /**
- * Adds command line arguments as config provider. Use the optional init block to customize options fluently.
+ * Adds command line arguments as a config provider. Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addCli(args: Array<String>, init: CliConfigProvider.() -> Unit = {}) = this.apply {
     val provider = CliConfigProvider(args)

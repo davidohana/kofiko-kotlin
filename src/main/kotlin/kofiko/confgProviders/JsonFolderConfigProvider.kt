@@ -62,7 +62,7 @@ class JsonFolderConfigProvider(
 }
 
 /**
- * Add a folder with json files as config provider.
+ * Add a folder with json files as a config provider.
  * Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addJsonFolder(folderPath: String, init: JsonFolderConfigProvider.() -> Unit = {}) = this.apply {

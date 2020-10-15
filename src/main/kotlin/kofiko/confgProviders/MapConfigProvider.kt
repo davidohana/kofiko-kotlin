@@ -50,7 +50,7 @@ open class MapConfigProvider(
 }
 
 /**
- * Add a map instance variables as config provider.
+ * Add a map instance variables as a config provider.
  * Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addMap(content: Map<String, String>, init: MapConfigProvider.() -> Unit = {}) = this.apply {

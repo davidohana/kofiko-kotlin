@@ -65,7 +65,7 @@ class JsonFileProviderFactory : FileProviderFactory {
 
 
 /**
- * Add a json file as config provider.
+ * Add a json file as a config provider.
  * Use the optional init block to customize options fluently.
  */
 fun KofikoSettings.addJson(filename: String, init: JsonConfigProvider.() -> Unit = {}) = this.apply {
