@@ -18,6 +18,17 @@ fun createConfigProvider(filename: String): KofikoConfigProvider? {
 }
 
 
+/**
+ * Adds a list of filenames as config providers.
+ *
+ * A config provider will be created for each supported file according to its name (and extension typically).
+ * First factory that supports that file type wins.
+ *
+ * A provider will not be created for missing files.
+ *
+ * Its also possible to specify filename without extension. This way, each factory will attempt to add
+ * an extension and check if such a file exists.
+ */
 fun KofikoSettings.addFiles(vararg filenames: String) = apply {
     for (filename in filenames) {
         val provider = createConfigProvider(filename)
@@ -26,11 +37,17 @@ fun KofikoSettings.addFiles(vararg filenames: String) = apply {
     }
 }
 
+/**
+ * Adds a list of files as config providers.
+ */
 fun KofikoSettings.addFiles(vararg files: File) = apply {
     val filenames = files.map { it.toString() }.toTypedArray()
     addFiles(*filenames)
 }
 
+/**
+ * Adds a list of file paths as config providers.
+ */
 fun KofikoSettings.addFiles(vararg paths: Path) = apply {
     val filenames = paths.map { it.toString() }.toTypedArray()
     addFiles(*filenames)

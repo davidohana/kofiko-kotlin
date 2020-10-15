@@ -1,11 +1,16 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package kofiko
 
 import java.io.File
 import java.lang.reflect.Type
-import java.nio.file.Path
 import java.util.*
 
 
+/**
+ * Retrieves configuration overrides from an .ini file.
+ * Section name is expected to be an ini header. Option name is expected to be an entry inside that header.
+ */
 class IniConfigProvider(configSource: ConfigSource) : KofikoConfigProvider {
 
     val sectionNameToProps = parseINI(configSource.content)
@@ -54,6 +59,9 @@ class IniFileProviderFactory : FileProviderFactory {
 }
 
 
+/**
+ * Add a `.ini` file as config provider.
+ */
 fun KofikoSettings.addIniFile(filename: String) = this.apply {
     val provider = IniConfigProvider(ConfigSource(filename))
     this.configProviders.add(provider)
