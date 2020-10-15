@@ -1,6 +1,5 @@
 package kofiko
 
-import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 

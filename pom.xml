@@ -6,7 +6,7 @@
 
     <groupId>org.davidoh.kofiko</groupId>
     <artifactId>kofiko-core</artifactId>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <packaging>jar</packaging>
 
     <name>Kofiko</name>
@@ -88,6 +88,12 @@
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/resources</directory>
+            </resource>
+        </resources>
 
         <plugins>
             <plugin>
