@@ -6,6 +6,9 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Path
 
+/**
+ * A configuration input source
+ */
 class ConfigSource private constructor(val content: String) {
 
     constructor(file: File, mustExist: Boolean = false) : this(readFile(file, mustExist))
