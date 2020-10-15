@@ -20,7 +20,7 @@ in any precedence order you like.
 class DatabaseConfig {
     var user = "default_user"
 
-    @ConfigOption(secret = true)
+    @Secret
     var password = "changeme"
 
     var endpoints = listOf("http://localhost:1234")
