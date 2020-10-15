@@ -1,15 +1,54 @@
 package kofiko
 
+/**
+ * Build-in name lookup provider, that provides alternatives to name search by different casing styles and also
+ * supports omitting specific terms from section names.
+ */
 open class DefaultNameLookupProvider : NameLookupProvider {
+    /**
+     * UPPERCASE (e.g hostName --> HOSTNAME)
+     */
     var allowUpper = true
+
+    /**
+     * lowercase (e.g hostName --> hostname)
+     */
     var allowLower = true
+
+    /**
+     * Original case (e.g hostName --> hostName)
+     */
     var allowOriginal = true
+
+    /**
+     * SNAKE_UPPER case (e.g hostName --> HOST_NAME)
+     */
     var allowSnakeUpper = true
+
+    /**
+     * snake_lower case (e.g hostName --> host_name)
+     */
     var allowSnakeLower = true
-    var allowKebabLower = true
+
+    /**
+     * KEBAB-UPPEr case (e.g hostName --> HOST-NAME)
+     */
     var allowKebabUpper = true
+
+    /**
+     * kebab-lower case (e.g hostName --> host-name)
+     */
+    var allowKebabLower = true
+
+    /**
+     * Upperfirstletter case (e.g hostName --> Hostname)
+     */
     var allowUpperFirstLetter = true
 
+    /**
+     * If any of the specified strings is contained in section name, an alternative without this
+     * term will ge provided as well.
+     */
     var sectionLookupDeleteTerms = mutableListOf("Config", "Settings", "Cfg", "Section")
 
     fun getCaseLookups(term: String): List<String> {
