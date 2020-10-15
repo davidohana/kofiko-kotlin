@@ -12,7 +12,7 @@ import java.util.*
  * are stripped if exist.
  *
  * By default, expected env var should be in the format section_option=value or prefix_section_option=key
- * if prefix is set.
+ * if [keyPrefix] is set.
  */
 class EnvFileConfigProvider(
     /**

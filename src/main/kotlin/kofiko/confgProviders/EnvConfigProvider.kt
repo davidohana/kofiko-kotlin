@@ -5,7 +5,7 @@ package kofiko
 /**
  * Retrieves configuration overrides from environment variables.
  * By default, expected env var should be in the format section_option=value or prefix_section_option=key
- * if prefix is set.
+ * if [keyPrefix] is set.
  */
 class EnvConfigProvider(
     /**
@@ -14,7 +14,7 @@ class EnvConfigProvider(
      *
      * For example MYAPP_database_host=localhost.
      */
-    prefix: String = "",
+    keyPrefix: String = "",
 
     /**
      * String that separates between section name and option name when looking up for config overrides.
@@ -27,7 +27,7 @@ class EnvConfigProvider(
     env: Map<String, String> = System.getenv()!!
 
 ) : MapConfigProvider(
-    env, prefix, sectionToOptionSeparator
+    env, keyPrefix, sectionToOptionSeparator
 )
 
 

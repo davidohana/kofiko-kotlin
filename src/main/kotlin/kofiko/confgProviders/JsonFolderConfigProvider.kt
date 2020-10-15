@@ -12,6 +12,11 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Retrieves configuration overrides from a folder with .json files.
+ * Each section is expected to be json file in that folder.
+ * Option name is expected to be a key=value entry under document root.
+ */
 class JsonFolderConfigProvider(
     val folder: Path,
     var objectMapper: ObjectMapper = ObjectMapper()
@@ -56,6 +61,10 @@ class JsonFolderConfigProvider(
     }
 }
 
+/**
+ * Add a folder with json files as config provider.
+ * Use the optional init block to customize options fluently.
+ */
 fun KofikoSettings.addJsonFolder(folderPath: String, init: JsonFolderConfigProvider.() -> Unit = {}) = this.apply {
     val provider = JsonFolderConfigProvider(folderPath)
     provider.init()
