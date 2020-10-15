@@ -4,11 +4,10 @@
 
 *kofiko* = (Ko)de-(Fi)rst (Ko)nfiguration
 
-Note: This is work-in-progress. Official first version not released yet. 
-
 ![](docs/kofiko-kotlin.png)
 
-* Lightweight, simple and minimal boilerplate *configuration library* for Kotlin.  
+**Lightweight, simple and minimal boilerplate configuration library for Kotlin.**
+  
 * Supported formats: `.json`, `.ini`, `.properties`, `.env`
 * Layered (cascading) and extensible design allows overriding the configuration from 
 environment variables, command-line arguments, JVM system properties (`-D`), Java Maps
