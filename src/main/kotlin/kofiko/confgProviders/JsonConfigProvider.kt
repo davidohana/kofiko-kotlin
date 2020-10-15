@@ -9,8 +9,30 @@ import java.io.File
 import java.lang.reflect.Type
 
 
-class JsonConfigProvider(val jsonNode: JsonNode, var objectMapper: ObjectMapper = ObjectMapper()) :
-    KofikoConfigProvider {
+/**
+ * Retrieves configuration overrides from an .json file.
+ * Section is expected to be a block with key under document root.
+ * Option name is expected to be a key=value entry inside that block.
+ *
+ * For example:
+ * {
+ *      "section_name": {
+ *          "option_name": "value"
+ *      }
+ * }
+ * *
+ */
+class JsonConfigProvider(
+    /**
+     * Json Source
+     */
+    val jsonNode: JsonNode,
+
+    /**
+     * [ObjectMapper] instance to use when parsing json content.
+     */
+    var objectMapper: ObjectMapper = ObjectMapper()
+) : KofikoConfigProvider {
 
     constructor(configSource: ConfigSource, objectMapper: ObjectMapper = ObjectMapper()) : this(
         objectMapper.readTree(configSource.content), objectMapper
@@ -42,6 +64,10 @@ class JsonFileProviderFactory : FileProviderFactory {
 }
 
 
+/**
+ * Add a json file as config provider.
+ * Use the optional init block to customize options fluently.
+ */
 fun KofikoSettings.addJson(filename: String, init: JsonConfigProvider.() -> Unit = {}) = this.apply {
     val provider = JsonConfigProvider(ConfigSource(filename))
     provider.init()
