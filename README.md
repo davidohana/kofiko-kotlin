@@ -17,7 +17,12 @@ in any precedence order you like.
 #### Define application configuration as Kotlin classes/objects:
 
 ``` kotlin
-class DatabaseConfig {
+data class LogConfig(
+    val level: Level = Level.INFO,
+    val logToFile: Boolean = true
+)
+
+object DatabaseConfig {
     var user = "default_user"
 
     @Secret
@@ -26,10 +31,6 @@ class DatabaseConfig {
     var endpoints = listOf("http://localhost:1234")
     var unsafeSSL = false
     var dbSizeLimits = mapOf("alerts" to 50, "logs" to 200)
-}
-
-object LogConfig {
-    var level = Level.INFO
 
     init {
         Kofiko.add(this)
@@ -37,12 +38,13 @@ object LogConfig {
 }
 ```
 
-Each config section is represented by a `class` / `object` so that configuration consumers may 
+Each config section is represented by a `class` / `data class` / `object` so that configuration consumers may 
 receive only the configuration of interest.
 
-Configuration options should be declared as `var` properties (read/write) with baked-in defaults.
+Configuration options should be declared as properties with baked-in defaults.
    
-By using Kotlin `object`, you may easily access configuration as a singleton without injection.    
+By using Kotlin `object`, you may easily access configuration as a 
+singleton from your configuration consumer without injection.    
 However, instances of configuration classes may be configured as well.
 
 #### Override default values at run-time: 
@@ -89,7 +91,12 @@ val settings = KofikoSettings()
 
 // optional setting to print config options with non-default value
 settings.onOverride = PrintOverrideNotifier()  
+
 Kofiko.init(settings)
+
+// create a configuration class and configure it 
+val logConfig = LogConfig()
+Kofiko.add(logConfig)
 
 // configuration is ready to use
 Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
@@ -200,6 +207,11 @@ in insertion order when looking for config option overrides.
     an existing filename with any supported extension.  
     For example: `settings.addFiles("sample_config")` will look for    
     sample_config.json, sample_config.ini, sample_config.env, sample_config.properties.
+
+* `configureReadonlyProperties` By default, Kofiko can configure
+   both `var` (non final) and `val` (final) properties. Set this 
+   to `false` to allow overriding only `var` fields. 
+   (Note: In Kotlin `object` Kofiko support `var` fields only).
 
 * `nameLookup` - a class of interface `NameLookupProvider` which defines how 
    to map between section/option name to a keys in configuration sources.

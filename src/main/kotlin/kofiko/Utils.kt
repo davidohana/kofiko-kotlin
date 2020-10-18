@@ -15,17 +15,18 @@ internal fun getInheritedDeclaredFields(c: Class<*>): List<Field> {
     return fields
 }
 
-internal fun <T> getOverridableFields(c: Class<T>): List<Field> {
+internal fun <T> getOverridableFields(c: Class<T>, includeReadOnly: Boolean): List<Field> {
     val allFields = getInheritedDeclaredFields(c)
 
     val fields = allFields
         .filter { Modifier.isPublic(it.modifiers) }
+        .filter { includeReadOnly || !Modifier.isFinal(it.modifiers) }
         .filter { it.name != "Companion" }
         .toMutableList()
 
     val backingFields = allFields
         .filter { Modifier.isPrivate(it.modifiers) }
-        .filter { hasPublicGetSet(it) }
+        .filter { hasPublicGetSet(it, needGet = true, needSet = !includeReadOnly) }
 
     fields.addAll(backingFields)
     return fields.toList()
@@ -40,19 +41,26 @@ internal fun separateCamelCase(term: String, separator: String = "_"): String {
     return str
 }
 
-internal fun hasPublicGetSet(f: Field): Boolean {
+internal fun hasPublicGetSet(f: Field, needGet: Boolean, needSet: Boolean): Boolean {
     val methodFieldName = f.name.first().toUpperCase() + f.name.substring(1)
     val methods = f.declaringClass.methods
 
     @Suppress("UNUSED_VARIABLE")
-    val getMethod = methods
-        .firstOrNull { it.name == "get$methodFieldName" && it.parameterCount == 0 } ?: return false
-    val setMethod = methods
-        .firstOrNull { it.name == "set$methodFieldName" && it.parameterCount == 1 } ?: return false
-    if (setMethod.parameterTypes.first() != f.type)
-        return false
+    if (needGet) {
+        val getMethod = methods
+            .firstOrNull { it.name == "get$methodFieldName" && it.parameterCount == 0 } ?: return false
+    }
+    if (needSet) {
+        val setMethod = methods
+            .firstOrNull { it.name == "set$methodFieldName" && it.parameterCount == 1 } ?: return false
+        // check that this method is actually related to the field
+        if (setMethod.parameterTypes.first() != f.type)
+            return false
+    }
+
     if (!f.trySetAccessible())
         return false
+
     return true
 }
 

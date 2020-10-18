@@ -3,6 +3,7 @@
 package kofiko
 
 import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import java.util.concurrent.CopyOnWriteArraySet
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -157,7 +158,12 @@ class Kofiko {
                     }
                     val oldValue = field.get(configObject)
                     val mergedValue = mergeContainers(oldValue, newValue)
-                    field.set(configObject, mergedValue)
+                    if (Modifier.isStatic(field.modifiers) && Modifier.isFinal(field.modifiers)) {
+                        throw IllegalAccessException(
+                            "Cannot configure field '${field.name}'. Configuring static final fields or val properties in Kotlin objects is not supported.")
+                    }
+                    else
+                        field.set(configObject, mergedValue)
                     return Pair(newValue, provider)
                 }
             }
@@ -166,7 +172,7 @@ class Kofiko {
     }
 
     private fun overrideConfigSection(configSection: Any): List<FieldOverride> {
-        val fields = getOverridableFields(configSection.javaClass)
+        val fields = getOverridableFields(configSection.javaClass, settings.configureReadonlyProperties)
 
         val oldValues = fields.map { it.get(configSection) }
         val sectionOverrides = mutableListOf<FieldOverride>()

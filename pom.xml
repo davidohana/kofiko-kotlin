@@ -6,7 +6,7 @@
 
     <groupId>org.davidoh.kofiko</groupId>
     <artifactId>kofiko-core</artifactId>
-    <version>1.0.16</version>
+    <version>1.0.17</version>
     <packaging>jar</packaging>
 
     <name>Kofiko</name>
@@ -130,6 +130,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -4,6 +4,11 @@ import kofiko.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
+data class LogConfig(
+    val level: Level = Level.INFO,
+    val logToFile: Boolean = true
+)
+
 object DatabaseConfig {
     var user = "default_user"
 
@@ -13,14 +18,6 @@ object DatabaseConfig {
     var endpoints = listOf("http://localhost:1234")
     var unsafeSSL = false
     var dbSizeLimits = mapOf("alerts" to 50, "logs" to 200)
-
-    init {
-        Kofiko.add(this)
-    }
-}
-
-object LogConfig {
-    var level = Level.INFO
 
     init {
         Kofiko.add(this)
@@ -45,9 +42,12 @@ fun main(args: Array<String>) {
     settings.nameLookup.allowUpper = false
     settings.nameLookup.sectionLookupDeleteTerms.add("Options")
 
+    val logConfig = LogConfig()
+    Kofiko.add(logConfig)
+
     Kofiko.init(settings)
 
     // configuration is ready to use
-    Logger.getLogger("test").log(LogConfig.level, "Hello Kofiko")
+    Logger.getLogger("test").log(logConfig.level, "Hello Kofiko")
     println("Database user is " + DatabaseConfig.user)
 }

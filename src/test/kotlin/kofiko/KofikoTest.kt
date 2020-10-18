@@ -31,16 +31,17 @@ class ParentOfNested {
 
 object MyCar {
     var color = "red"
+    var year = 2020
 }
 
 enum class Colors { Red, Green, Blue }
 
 @Suppress("PropertyName")
 class KofikoSampleConfig {
-    var MyInt = 11
-    var MyLong: Long? = 55L
-    var MyString1 = "abc"
-    var MyString2: String? = "def"
+    val MyInt = 11
+    val MyLong: Long? = 55L
+    val MyString1 = "abc"
+    val MyString2: String? = "def"
     var MyBool1 = false
     var MyBool2 = false
     var MyBool3 = false
@@ -57,14 +58,14 @@ class KofikoSampleConfig {
     var MyFloatList = listOf(1.1f, 2.1f, 3.1f)
     var MyDoubleList = listOf(2.1, 3.1, 4.1)
     var MyBooleanList = listOf(true, false)
-    var MyDict1 = mapOf("a" to 1, "b" to 2)
+    val MyDict1 = mapOf("a" to 1, "b" to 2)
     var MyDict2 = mapOf("a" to 1, "b" to 2)
     var MyDict3 = mapOf("a" to 1, "b" to 2)
     var MyDict4 = mapOf("a" to 1, "b" to 2)
     var MyDict5 = mapOf("a" to 1, "b" to 2)
-    var MyIntToFloatDict = mapOf(1 to 1.1, 2 to 2.2)
+    val MyIntToFloatDict = mapOf(1 to 1.1, 2 to 2.2)
     var MyColor = Colors.Red
-    var MyAccessMode = AccessMode.EXECUTE
+    val MyAccessMode = AccessMode.EXECUTE
 
     companion object {
         val instance = KofikoSampleConfig()
@@ -76,7 +77,12 @@ class KofikoSampleConfig {
 }
 
 @Suppress("unused", "PropertyName", "ProtectedInFinal")
-class TestClass {
+class AccessModesSample {
+    var privateSetter = 2
+        private set
+
+    val valProperty = "r"
+
     var name = "name1"
     var Age = 11
     var COLOR = Color.BLUE
@@ -87,14 +93,17 @@ class TestClass {
     var NAME = "name2"
     var x = "x1"
 
-    var privateSetter = 2
-        private set
+    @JvmField
+    var jvmFieldVar = 2
 
     @JvmField
-    var jvmField = 2
+    val jvmFieldVal = 27
 
     @JvmField
-    protected var jvmFieldProtected = 22
+    protected var jvmFieldProtectedVar = 22
+
+    @JvmField
+    internal var jvmFieldInternalVar = 224
 
     companion object {
         var staticField = 145
@@ -105,17 +114,23 @@ class KofikoTest {
 
     @Test
     fun testGetFields() {
-        val fields = getOverridableFields(TestClass::class.java)
-        fields.size.shouldBeEqualTo(7)
+        val fields = getOverridableFields(AccessModesSample::class.java, false)
 
         val fieldNames = fields.map { it.name }
-        fieldNames.shouldContain("name")
-        fieldNames.shouldContain("Age")
-        fieldNames.shouldContain("COLOR")
-        fieldNames.shouldContain("_height")
-        fieldNames.shouldContain("NAME")
-        fieldNames.shouldContain("jvmField")
-        fieldNames.shouldContain("x")
+        val expected = mutableListOf(
+            "name", "Age", "COLOR", "_height",
+            "NAME", "jvmFieldVar", "x", "jvmFieldInternalVar"
+        )
+        fieldNames.shouldContainSame(expected)
+
+        val fieldsWithReadOnly = getOverridableFields(AccessModesSample::class.java, true)
+
+        val fieldNames2 = fieldsWithReadOnly.map { it.name }
+        expected.add("valProperty")
+        expected.add("privateSetter")
+        expected.add("jvmFieldVal")
+
+        fieldNames2.shouldContainSame(expected)
     }
 
     @Test
@@ -505,12 +520,14 @@ class KofikoTest {
 
         val env = mapOf(
             "my_car_color" to "blue",
+            "my_car_year" to "2019",
         )
 
         settings.configProviders.add(EnvConfigProvider(env = env))
         val kofiko = Kofiko(settings)
         kofiko.add(MyCar)
         MyCar.color.shouldBeEqualTo("blue")
+        MyCar.year.shouldBeEqualTo(2019)
     }
 
     @Test

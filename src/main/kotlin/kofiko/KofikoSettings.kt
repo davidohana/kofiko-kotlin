@@ -110,6 +110,20 @@ class KofikoSettings() {
     )
 
     /**
+     * When set to true, allow overriding of final non-static Kotlin Properties (val), Kotlin properties without a public setter
+     * and final JVM fields.
+     * **Important note**: This settings still does not allow overriding val properties in Kotlin `object`
+     * and static final java fields due to JVM limitation.
+     *
+     * When set to false, configuration will be applicable only to non-final Kotlin Properties (var) with public
+     * getter and setter and to public non-final JVM fields.
+     *
+     * Configuration is never applied to Kotlin properties where both getter and setter are private/protected,
+     * and to private/protected JVM fields.
+     */
+    var configureReadonlyProperties = true
+
+    /**
      * The [ObjectMapper] that will be used by [JsonParser] when trying to parse strings to typed fields.
      */
     var objectMapper = ObjectMapper()
