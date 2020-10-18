@@ -66,11 +66,11 @@ For example, from a JSON file:
 or using *env. vars*:
 
 ```shell script
-DATABASE_user=davidoh \
-DATABASE_password=reallysecret! \
-DATABASE_endpoints=prod1,prod2 \
-LOG_level=WARNING \
+database_user=davidoh \
+DATABASE_PASSWORD=reallysecret! \
+DATABASE_Endpoints=prod1,prod2 \
 DATABASE_DB_SIZE_LIMITS=logs:5,events:120 \
+LOG_level=WARNING \
 java -cp my_app.jar
 ```
 
